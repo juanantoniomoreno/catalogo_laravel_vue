@@ -1,61 +1,218 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+Gestor de Catálogo de Licencias Digitales
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Este proyecto Laravel implementa un sistema para la gestión de un catálogo de licencias de productos digitales, incluyendo soporte multi-idioma, gestión de precios, opciones de productos, packs y ofertas.
 
-## About Laravel
+🚀 Características Principales
+Gestión de Productos: Define productos base con su estado (activo/inactivo) y tipo (simple, grupo_opciones, pack).
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Soporte Multi-idioma (i18n): Nombres, descripciones y slugs de productos y opciones disponibles en múltiples idiomas.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Imágenes por URL: Almacenamiento eficiente de imágenes (principal y galería) mediante URLs, delegando el almacenamiento de archivos al sistema de ficheros o CDN.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Precios Flexibles: Precios base para productos y precios específicos para cada opción.
 
-## Learning Laravel
+Opciones de Producto: Permite definir variantes para un producto principal (ej., diferentes versiones de un software).
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+Packs de Productos: Crea paquetes que agrupan múltiples productos individuales con cantidades específicas.
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+Gestión de Ofertas: Define ofertas con precios especiales y rangos de fechas para productos o packs.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+No uso de Enums PHP 8.1+: Los estados y tipos se gestionan mediante cadenas de texto y constantes en los modelos, garantizando compatibilidad.
 
-## Laravel Sponsors
+🛠️ Requisitos del Sistema
+Asegúrate de tener instalado lo siguiente:
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+PHP: >= 8.1 (aunque el código no usa Enums, versiones recientes de Laravel los requieren).
 
-### Premium Partners
+Composer: Gestor de paquetes de PHP.
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+Node.js & npm/Yarn: Para la gestión de dependencias frontend (Vue.js).
 
-## Contributing
+Base de Datos: MySQL (recomendado) u otra base de datos soportada por Laravel (PostgreSQL, SQLite, SQL Server).
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+⚙️ Instalación y Configuración
+Sigue estos pasos para poner el proyecto en marcha en tu entorno local:
 
-## Code of Conduct
+Clonar el repositorio:
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+git clone https://your-repository-url.com
+cd your-project-name
 
-## Security Vulnerabilities
+Instalar dependencias de Composer:
+composer install
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Configurar el archivo .env:
 
-## License
+Copia el archivo de ejemplo:
+cp .env.example .env
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Genera una clave de aplicación:
+php artisan key:generate
+Abre el archivo .env y configura tus credenciales de base de datos (DB_CONNECTION, DB_HOST, DB_PORT, DB_DATABASE, DB_USERNAME, DB_PASSWORD).
+
+Fragmento de código
+
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=nombre_de_tu_base_de_datos
+DB_USERNAME=tu_usuario_db
+DB_PASSWORD=tu_password_db
+
+Ejecutar migraciones de la base de datos:
+Esto creará todas las tablas necesarias:
+
+php artisan migrate
+Si quieres una base de datos limpia y poblarla con datos de prueba (si tienes seeders):
+
+php artisan migrate:fresh --seed
+
+Configurar el enlace simbólico de almacenamiento:
+
+php artisan storage:link
+
+Instalar dependencias de Node.js y compilar assets (si usas frontend con Vue.js):
+
+npm install
+npm run dev # Para desarrollo
+# o
+npm run build # Para producción
+Iniciar el servidor de desarrollo de Laravel:
+
+Bash
+
+php artisan serve
+El proyecto estará accesible en http://127.0.0.1:8000 (o el puerto indicado).
+
+📂 Estructura de la Base de Datos
+Aquí se detalla la estructura de las tablas principales y sus relaciones:
+
+products: Productos base.
+
+product_translations: Nombres, descripciones y slugs de productos por locale. (Relación 1:N con products)
+
+product_images: URLs de imágenes de galería de productos. (Relación 1:N con products)
+
+product_prices: Precio base de un producto. (Relación 1:1 con products)
+
+options: Variantes de un producto principal. (Relación 1:N con products)
+
+option_translations: Nombres y descripciones de opciones por locale. (Relación 1:N con options)
+
+option_prices: Precio específico de una opción. (Relación 1:1 con options)
+
+pack_products: Tabla pivote para packs, relacionando un product de tipo 'pack' con otros products que son sus ítems. (Relación M:N entre products y products)
+
+offers: Detalles de ofertas aplicables a productos. (Relación 1:N con products)
+
+Puedes visualizar el Diagrama Entidad-Relación (DER) / Relacional en formato Mermaid:
+
+Fragmento de código
+
+erDiagram
+    products {
+        int id PK
+        string main_image_url "URL de la imagen principal"
+        string status "('active', 'inactive')"
+        string type "('simple', 'option_group', 'pack')"
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    product_translations {
+        int id PK
+        int product_id FK
+        string locale "('es', 'it', 'fr', 'en', 'pt')"
+        string name
+        text description
+        string slug
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    product_images {
+        int id PK
+        int product_id FK
+        string image_url "URL de la imagen de galería"
+        int order
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    product_prices {
+        int id PK
+        int product_id FK
+        decimal price
+        string currency
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    options {
+        int id PK
+        int product_id FK "parent_product"
+        string image_url "URL de la imagen de la opción"
+        string status "('active', 'inactive')"
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    option_translations {
+        int id PK
+        int option_id FK
+        string locale
+        string name
+        text description
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    option_prices {
+        int id PK
+        int option_id FK
+        decimal price
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    pack_products {
+        int pack_id FK "FK_products_pack"
+        int product_id FK "FK_products_item"
+        int quantity
+    }
+
+    offers {
+        int id PK
+        int product_id FK "applies_to_product_or_option_or_pack"
+        decimal offer_price
+        datetime start_date
+        datetime end_date
+        string status "('active', 'inactive', 'scheduled', 'expired')"
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    products ||--o{ product_translations : has
+    products ||--o{ product_images : has
+    products ||--o{ product_prices : has
+    products ||--o{ options : has_options
+    options ||--o{ option_translations : has
+    options ||--o{ option_prices : has
+    products }o--o{ pack_products : contains_products_in_pack
+    products ||--o{ offers : has_offers
+👩‍💻 Uso y Desarrollo
+Modelos Eloquent: Los modelos se encuentran en app/Models/ y definen las relaciones de Eloquent para interactuar con la base de datos.
+
+Controladores: Crea controladores en app/Http/Controllers/ para manejar la lógica de negocio y las operaciones CRUD.
+
+Rutas API: Define las rutas para tu API en routes/api.php para interactuar con el frontend.
+
+Gestión de Imágenes: Implementa la lógica para subir imágenes a storage/app/public y guardar sus URLs en la base de datos.
+
+Frontend (Vue.js): Utiliza Vue I18n para la gestión de traducciones en el lado del cliente. Asegúrate de que el frontend consuma las traducciones desde las tablas _translations del backend.
+
+🤝 Contribuciones
+Las contribuciones son bienvenidas. Por favor, abre un "issue" para discutir cambios propuestos o envía un "pull request" con tus mejoras.
+
+📄 Licencia
+Este proyecto está bajo la licencia MIT License.
