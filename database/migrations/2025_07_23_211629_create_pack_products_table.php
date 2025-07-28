@@ -17,7 +17,7 @@ return new class extends Migration
             $table->integer('quantity')->default(1);
             $table->timestamps();
 
-            $table->primary(['pack_id', 'product_id']); // Clave primaria compuesta para la relación M:N
+            $table->primary(['pack_id', 'product_id']);
         });
     }
 

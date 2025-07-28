@@ -24,18 +24,26 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 // --- Rutas para la gestión de productos ---
 
-// Obtener todos los productos
-Route::get('/products', [ProductController::class, 'index']);
+// 
+// 1. Ruta específica para productos filtrados
+Route::get('/products/filtered', [ProductController::class, 'getFilteredProducts']);
 
+// 2. Rutas genéricas
 // Obtener un producto
 Route::get('/products/{product}', [ProductController::class, 'show']);
 // Actualizar un producto 
 Route::put('/products/{product}', [ProductController::class, 'update']);
+// Elimina un producto 
+Route::delete('/products/{product}', [ProductController::class, 'destroy']);
 
-// 3. Crear un nuevo producto (Protegido por Policy)
-// El ProductController tiene $this->authorize('create', Product::class) en el método store,
-// que usa ProductPolicy.php para verificar si el usuario es administrador.
+// 3. Otras rutas específica
+// Crear un nuevo producto
 Route::post('/products/create', [ProductController::class, 'store']);
 
-// Route::put('/products/{product}', [ProductController::class, 'update']);
-// Route::delete('/products/{product}', [ProductController::class, 'destroy']);
+// 4. Ruta general
+// Obtener todos los productos
+Route::get('/products', [ProductController::class, 'index']);
+
+
+
+

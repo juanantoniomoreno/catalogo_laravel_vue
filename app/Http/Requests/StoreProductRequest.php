@@ -22,7 +22,7 @@ class StoreProductRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
+        $rules = [
             'main_image_url'                => 'nullable|url|max:255',
             'status'                        => 'required|string|in:' . Product::STATUS_ACTIVE . ',' . Product::STATUS_INACTIVE, 
             'type'                          => 'required|string|in:' . Product::TYPE_SIMPLE . ',' . Product::TYPE_PACK . ',' . Product::TYPE_OPTION_GROUP,
@@ -32,5 +32,15 @@ class StoreProductRequest extends FormRequest
             // Validación para el precio
             'price'                         => 'required|numeric|min:0',
         ];
+
+        // Reglas condicionales para el tipo 'pack'
+        if ($this->input('type') === Product::TYPE_PACK) {
+            $rules['pack_products'] = ['required', 'array', 'min:1'];
+            // Debe ser un ID de producto existente
+            $rules['pack_products.*.product_id'] = ['required', 'exists:products,id']; 
+            $rules['pack_products.*.quantity'] = ['required', 'integer', 'min:1'];
+        }
+
+        return $rules;
     }
 }
