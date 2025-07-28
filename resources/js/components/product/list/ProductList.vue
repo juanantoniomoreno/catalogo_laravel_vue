@@ -1,8 +1,15 @@
 <template>
+    <h1>Listado de Productos</h1>
     <div class="product-list">
-        <h1>Listado de Productos</h1>
         <p v-if="loading">Cargando productos...</p>
         <p v-if="error" class="error-message">{{ error }}</p>
+
+        <router-link to="/products/create" class="create-product-button">
+            Crear Nuevo Producto
+        </router-link>
+        <router-link :to="{ path: '/products/create', query: { type: 'pack' } }" class="create-product-button">
+            Crear Nuevo Pack
+        </router-link>
 
         <div v-if="!loading && products.length === 0">
             <p>No hay productos disponibles.</p>
@@ -17,9 +24,15 @@
                     <p class="product-description">{{ product.description }}</p>
                     <p class="product-price">{{ product.price ?? 'N/A' }}</p>
                     <p class="product-status">Estado: {{ product.status }}</p>
-                    <router-link :to="{ name: 'ProductEditForm', params: { productId: product.id } }" class="edit-button">
-                        Editar
-                    </router-link>
+                    <div class="product-actions">
+                        <router-link :to="{ name: 'ProductEditForm', params: { productId: product.id } }"
+                            class="edit-button">
+                            Editar
+                        </router-link>
+                        <button @click="confirmDelete(product.id)" class="delete-button">
+                            Eliminar
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -51,10 +64,37 @@ export default {
 
         onMounted(fetchProducts);
 
+        const confirmDelete = async (productId) => {
+            if (confirm('¿Estás seguro de que quieres eliminar este producto? Esta acción no se puede deshacer.')) {
+                await deleteProduct(productId);
+            }
+        };
+
+        const deleteProduct = async (productId) => {
+            try {
+                await axios.delete(`/api/products/${productId}`);
+                // Si la eliminación es exitosa, filtra el producto de la lista local
+                products.value = products.value.filter(p => p.id !== productId);
+                alert('Producto eliminado exitosamente.');
+            } catch (err) {
+                console.error('Error deleting product:', err);
+                let errorMessage = 'Error al eliminar el producto.';
+                if (err.response) {
+                    if (err.response.status === 403) {
+                        errorMessage = 'No tienes permiso para eliminar este producto.';
+                    } else if (err.response.data && err.response.data.message) {
+                        errorMessage = err.response.data.message;
+                    }
+                }
+                alert(errorMessage);
+            }
+        };
+
         return {
             products,
             loading,
-            error
+            error,
+            confirmDelete
         };
     }
 };
@@ -130,17 +170,59 @@ export default {
     margin-bottom: 15px;
 }
 
-.edit-button {
-  display: inline-block;
-  background-color: #007bff;
-  color: white;
-  padding: 0.5em 1em;
-  border-radius: 5px;
-  text-decoration: none;
-  margin-top: 0.5em;
-  transition: background-color 0.3s ease;
+.product-actions {
+    display: flex;
+    gap: 10px;
+    /* Espacio entre los botones */
+    margin-top: 15px;
 }
+
+.edit-button,
+.delete-button {
+    padding: 0.5em 1em;
+    border-radius: 5px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 0.9em;
+}
+
+.edit-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+}
+
 .edit-button:hover {
-  background-color: #0056b3;
+    background-color: #0056b3;
+}
+
+.delete-button {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+}
+
+.delete-button:hover {
+    background-color: #c82333;
+}
+
+.create-product-button {
+    display: inline-block;
+    background-color: #28a745;
+    color: white;
+    padding: 0.25em 1.25em;
+    margin-right: 0.5em;
+    border-radius: 5px;
+    text-decoration: none;
+    /* Eliminar el subrayado del enlace */
+    margin-bottom: 20px;
+    /* Espacio debajo del botón antes de la lista */
+    transition: background-color 0.3s ease;
+    font-weight: bold;
+}
+
+.create-product-button:hover {
+    background-color: #218838;
 }
 </style>

@@ -12,8 +12,8 @@
                 </router-link>
             </li>
             <li class="nav-item">
-                <router-link to="/products/create" class="nav-link">
-                    Crear Producto
+                <router-link to="/packs/list" class="nav-link">
+                    Packs
                 </router-link>
             </li>
         </ul>

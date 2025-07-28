@@ -65,7 +65,8 @@ class Product extends Model
         // 'product_id' es la FK en pack_products que apunta a los productos individuales
         // 'pack_id' es la FK en pack_products que apunta a este producto (el pack)
         return $this->belongsToMany(Product::class, 'pack_products', 'pack_id', 'product_id')
-                    ->withPivot('quantity');
+                    ->withPivot('quantity')
+                    ->withTimestamps();
     }
 
     /**

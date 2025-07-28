@@ -1,9 +1,9 @@
 <template>
+	<h1>{{ isEditing ? 'Editar Producto' : 'Crear Nuevo Producto' }}</h1>
 	<div class="product-create-form">
-		<h1>{{isEditing ? 'Editar Producto' : 'Crear Nuevo Producto'}}</h1>
 
 		<div v-if="loadingInitialData" class="loading-message">Cargando datos del producto...</div>
-    	<div v-if="fetchError" class="error-message">{{ fetchError }}</div>
+		<div v-if="fetchError" class="error-message">{{ fetchError }}</div>
 
 		<form v-if="!loadingInitialData && !fetchError" @submit.prevent="submitForm" class="product-form">
 			<div v-if="successMessage" class="success-message">
@@ -33,10 +33,10 @@
 
 				<div class="form-group">
 					<label for="type">Tipo:</label>
-					<select id="type" v-model="form.type" class="form-control">
+					<select disabled="{{ !!form.type }}" id="type" v-model="form.type" class="form-control">
 						<option value="simple">Producto</option>
 						<option value="pack">Pack</option>
-						<option value="option_group">Grupo</option>
+						<option value="option_group">Opción</option>
 					</select>
 					<span v-if="errors.type" class="error-text">{{ errors.type[0] }}</span>
 				</div>
@@ -49,7 +49,7 @@
 					<label for="name_es">Nombre del Producto (ES):</label>
 					<input type="text" id="name_es" v-model="form.translations.es.name" class="form-control">
 					<span v-if="errors['translations.es.name']" class="error-text">{{ errors['translations.es.name'][0]
-						}}</span>
+					}}</span>
 				</div>
 
 				<div class="form-group">
@@ -71,8 +71,38 @@
 				</div>
 			</fieldset>
 
+			<fieldset v-if="form.type === 'pack'" class="form-section">
+				<legend>Productos del Pack</legend>
+				<div v-if="errors.pack_products" class="error-text mb-3">{{ errors.pack_products[0] }}</div>
+
+				<div v-for="(item, index) in form.pack_products" :key="index" class="pack-item-row">
+					<div class="form-group flex-grow">
+						<label :for="`product_${index}`">Producto:</label>
+						<select :id="`product_${index}`" v-model="item.product_id" class="form-control">
+							<option value="">Selecciona un producto</option>
+							<option v-for="p in availableProducts" :key="p.id" :value="p.id">
+								{{ p.name }}
+							</option>
+						</select>
+						<span v-if="errors[`pack_products.${index}.product_id`]" class="error-text">{{
+							errors[`pack_products.${index}.product_id`][0] }}</span>
+					</div>
+					<div class="form-group">
+						<label :for="`item_quantity_${index}`">Cantidad:</label>
+						<input disabled type="number" :id="`item_quantity_${index}`" v-model.number="item.quantity" min="1"
+							class="form-control small-input">
+						<span v-if="errors[`pack_products.${index}.quantity`]" class="error-text">{{
+							errors[`pack_products.${index}.quantity`][0] }}</span>
+					</div>
+					<button type="button" @click="removePackItem(index)" class="remove-item-button">X</button>
+				</div>
+
+				<button type="button" @click="addPackItem" class="add-item-button">Añadir Ítem al Pack</button>
+			</fieldset>
+
 			<button type="submit" :disabled="isSubmitting" class="submit-button">
-				{{ isSubmitting ? (isEditing ? 'Actualizando...' : 'Creando...') : (isEditing ? 'Actualizar Producto' : 'Crear Producto') }}
+				{{ isSubmitting ? (isEditing ? 'Actualizando...' : 'Creando...') : (isEditing ? 'Actualizar Producto' :
+					'Crear Producto') }}
 			</button>
 		</form>
 	</div>
@@ -88,15 +118,19 @@ export default {
 		productId: {
 			type: [String, Number, null],
 			default: null
-		}
+		},
+		initialType: {
+			type: String,
+			default: 'simple',
+		},
 	},
 	setup(props) {
 		const router = useRouter(); // Instancia del router
 
 		const form = reactive({
 			main_image_url: '',
-			status: 'draft', // Valor por defecto
-			type: 'digital',   // Valor por defecto
+			status: 'active', 
+			type: props.initialType,
 			translations: {
 				es: {
 					name: '',
@@ -104,26 +138,43 @@ export default {
 					slug: '',
 				},
 			},
-			price: 0.00
+			price: 0.00,
+			pack_products: []
 		});
 
 		const loadingInitialData = ref(false);
-		const isSubmitting = ref(false);      
+		const isSubmitting = ref(false);
 		const errors = ref({});
 		const successMessage = ref('');
 		const errorMessage = ref('');
 		const fetchError = ref(null);
+		const availableProducts = ref([]);
 
-		const isEditing = computed(() => Boolean(props.productId));
+		const isEditing = computed(() => Boolean(props.productId));		
+
+		// Función para obtener todos los productos que NO sean packs, para usarlos como ítems
+		const fetchAvailableProducts = async () => {
+			try {				
+				const response = await axios.get('/api/products/filtered', {
+					params: {
+						type: 'simple'
+					}
+				});
+				availableProducts.value = response.data;
+			} catch (error) {
+				console.error('Error fetching available products:', error);
+			}
+		};
 
 		// Función para limpiar el formulario
 		const resetForm = () => {
 			form.main_image_url = '';
 			form.status = 'inactive';
-			form.type = 'simple';
+			form.type = props.initialType;
 			form.translations.es.name = '';
-			form.translations.es.description = '';			
-			form.price = 0.00;			
+			form.translations.es.description = '';
+			form.price = 0.00;
+			form.pack_products = [];
 			errors.value = {};
 			successMessage.value = '';
 			errorMessage.value = '';
@@ -138,19 +189,29 @@ export default {
 			try {
 				const response = await axios.get(`/api/products/${id}`);
 				const productData = response.data;
-				
+
 				form.main_image_url = productData.main_image_url || '';
 				form.status = productData.status || 'inactive'
 				form.type = productData.type || 'simple';
-				
+
 				form.translations.es.name = productData.name || ''; // Accedemos a la propiedad 'name' ya traducida
 				form.translations.es.description = productData.description || '';
 				form.translations.es.slug = productData.slug || '';
 
 				if (productData.price) {
-					form.price = productData.price;					
+					form.price = productData.price;
 				} else {
-					form.price = 0.00; 					
+					form.price = 0.00;
+				}
+
+				// Si es un pack, poblar pack_items
+				if (productData.type === 'pack' && productData.items) {
+					form.pack_products = productData.items.map(item => ({
+						product_id: item.id,
+						quantity: item.quantity,
+					}));
+				} else {
+					form.pack_products = []; // Asegurarse de que esté vacío si no es un pack
 				}
 			} catch (err) {
 				fetchError.value = 'Error al cargar los datos del producto. No existe o no tienes permiso.';
@@ -171,8 +232,8 @@ export default {
 				if (isEditing.value) {
 					// Si estamos editando
 					response = await axios.put(`/api/products/${props.productId}`, form);
-          			successMessage.value = 'Producto actualizado exitosamente!';
-				} else {
+					successMessage.value = 'Producto actualizado exitosamente!';
+				} else {					
 					response = await axios.post('/api/products/create', form);
 					successMessage.value = 'Producto creado exitosamente!';
 				}
@@ -201,18 +262,28 @@ export default {
 			}
 		};
 
+		// Funciones para manejar los ítems del pack
+		const addPackItem = () => {
+			form.pack_products.push({ product_id: '', quantity: 1 });
+		};
+
+		const removePackItem = (index) => {
+			form.pack_products.splice(index, 1);
+		};
+
 		// Cuando el componente se inicia o el productId cambia
 		onMounted(() => {
+			fetchAvailableProducts();
 			if (isEditing.value) {
 				fetchProductData(props.productId);
-			} else {				
+			} else {
 				resetForm(); // Limpiar el formulario si estamos en modo creación
 			}
 		});
 
 		// Observa si el productId de la ruta cambia
 		watch(() => props.productId, (newId) => {
-			if (newId) { 
+			if (newId) {
 				fetchProductData(newId);
 			} else { // Si el ID es null (pasamos a modo creación)
 				resetForm();
@@ -228,7 +299,10 @@ export default {
 			successMessage,
 			errorMessage,
 			fetchError,
+			availableProducts, // Exponer para el template
 			submitForm,
+			addPackItem,
+			removePackItem,
 		};
 	},
 };
@@ -241,14 +315,6 @@ export default {
 	padding: 1.75empx;
 	background-color: #fff;
 	border-radius: 0.5em;
-	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-h1 {
-	text-align: center;
-	color: #333;
-	margin-bottom: 1.75em;
-	font-size: 2em;
 }
 
 .product-form {
@@ -360,5 +426,67 @@ textarea.form-control {
 	border-radius: 5px;
 	margin-bottom: 20px;
 	text-align: center;
+}
+
+.pack-item-row {
+	display: flex;
+	align-items: flex-end;
+	/* Alinea los elementos en la parte inferior */
+	gap: 15px;
+	margin-bottom: 15px;
+	background-color: #f0f0f0;
+	padding: 10px;
+	border-radius: 5px;
+	border: 1px dashed #ccc;
+}
+
+.pack-item-row .form-group {
+	margin-bottom: 0;
+	/* Elimina el margen inferior del form-group dentro de la fila */
+}
+
+.flex-grow {
+	flex-grow: 1;
+	/* Permite que el select de producto crezca */
+}
+
+.small-input {
+	width: 80px;
+	/* Ancho más pequeño para la cantidad */
+}
+
+.remove-item-button {
+	background-color: #dc3545;
+	color: white;
+	border: none;
+	border-radius: 5px;
+	padding: 0.5em 0.75px;
+	cursor: pointer;
+	font-weight: bold;
+	transition: background-color 0.2s ease;
+	height: 38px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.remove-item-button:hover {
+	background-color: #c82333;
+}
+
+.add-item-button {
+	background-color: #17a2b8;
+	/* Un color diferente para añadir ítems */
+	color: white;
+	border: none;
+	border-radius: 5px;
+	padding: 0.75em 1em;
+	cursor: pointer;
+	transition: background-color 0.2s ease;
+	margin-top: 0.75em;
+}
+
+.add-item-button:hover {
+	background-color: #138496;
 }
 </style>

@@ -12,14 +12,18 @@ const routes = [
         path: '/products/create',
         name: 'ProductCreateForm',
         component: ProductCreateForm,
-        props: { productId: null }
+        props: (route) => ({ 
+            productId: null,
+            initialType: route.query.type || 'simple'
+        }) 
     },
     {
         path: '/products/edit/:productId',
         name: 'ProductEditForm',
         component: ProductCreateForm,
         props: true
-    },
+    }
+    
     // Añade más rutas aquí
     // { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFound } // Opcional: para rutas no encontradas
 ];
