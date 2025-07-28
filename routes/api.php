@@ -24,11 +24,13 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 // --- Rutas para la gestión de productos ---
 
-// 1. Obtener todos los productos (Listado)
+// Obtener todos los productos
 Route::get('/products', [ProductController::class, 'index']);
 
-// 2. Obtener un producto específico por ID
+// Obtener un producto
 Route::get('/products/{product}', [ProductController::class, 'show']);
+// Actualizar un producto 
+Route::put('/products/{product}', [ProductController::class, 'update']);
 
 // 3. Crear un nuevo producto (Protegido por Policy)
 // El ProductController tiene $this->authorize('create', Product::class) en el método store,

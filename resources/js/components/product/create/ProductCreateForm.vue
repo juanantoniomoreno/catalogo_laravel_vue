@@ -1,8 +1,11 @@
 <template>
 	<div class="product-create-form">
-		<h1>Crear Nuevo Producto</h1>
+		<h1>{{isEditing ? 'Editar Producto' : 'Crear Nuevo Producto'}}</h1>
 
-		<form @submit.prevent="createProduct" class="product-form">
+		<div v-if="loadingInitialData" class="loading-message">Cargando datos del producto...</div>
+    	<div v-if="fetchError" class="error-message">{{ fetchError }}</div>
+
+		<form v-if="!loadingInitialData && !fetchError" @submit.prevent="submitForm" class="product-form">
 			<div v-if="successMessage" class="success-message">
 				{{ successMessage }}
 			</div>
@@ -68,20 +71,26 @@
 				</div>
 			</fieldset>
 
-			<button type="submit" :disabled="loading" class="submit-button">
-				{{ loading ? 'Creando...' : 'Crear Producto' }}
+			<button type="submit" :disabled="isSubmitting" class="submit-button">
+				{{ isSubmitting ? (isEditing ? 'Actualizando...' : 'Creando...') : (isEditing ? 'Actualizar Producto' : 'Crear Producto') }}
 			</button>
 		</form>
 	</div>
 </template>
 
 <script>
-import { ref, reactive } from 'vue';
+import { ref, reactive, computed, onMounted, watch } from 'vue';
 import axios from 'axios';
 import { useRouter } from 'vue-router'; // Importa useRouter para la redirección
 
 export default {
-	setup() {
+	props: {
+		productId: {
+			type: [String, Number, null],
+			default: null
+		}
+	},
+	setup(props) {
 		const router = useRouter(); // Instancia del router
 
 		const form = reactive({
@@ -95,37 +104,81 @@ export default {
 					slug: '',
 				},
 			},
-			price: {
-				price: 0.00,
-				currency: 'EUR', // Valor por defecto
-			},
+			price: 0.00
 		});
 
-		const loading = ref(false);
-		const errors = ref({}); // Para almacenar errores de validación
+		const loadingInitialData = ref(false);
+		const isSubmitting = ref(false);      
+		const errors = ref({});
 		const successMessage = ref('');
 		const errorMessage = ref('');
+		const fetchError = ref(null);
 
-		const createProduct = async () => {
-			loading.value = true;
-			errors.value = {}; // Limpiar errores anteriores
+		const isEditing = computed(() => Boolean(props.productId));
+
+		// Función para limpiar el formulario
+		const resetForm = () => {
+			form.main_image_url = '';
+			form.status = 'inactive';
+			form.type = 'simple';
+			form.translations.es.name = '';
+			form.translations.es.description = '';			
+			form.price = 0.00;			
+			errors.value = {};
+			successMessage.value = '';
+			errorMessage.value = '';
+			fetchError.value = null;
+		};
+
+		// Función para cargar los datos del producto existente (solo en modo edición)
+		const fetchProductData = async (id) => {
+			loadingInitialData.value = true;
+			fetchError.value = null;
+
+			try {
+				const response = await axios.get(`/api/products/${id}`);
+				const productData = response.data;
+				
+				form.main_image_url = productData.main_image_url || '';
+				form.status = productData.status || 'inactive'
+				form.type = productData.type || 'simple';
+				
+				form.translations.es.name = productData.name || ''; // Accedemos a la propiedad 'name' ya traducida
+				form.translations.es.description = productData.description || '';
+				form.translations.es.slug = productData.slug || '';
+
+				if (productData.price) {
+					form.price = productData.price;					
+				} else {
+					form.price = 0.00; 					
+				}
+			} catch (err) {
+				fetchError.value = 'Error al cargar los datos del producto. No existe o no tienes permiso.';
+				console.error('Error fetching product for edit:', err);
+			} finally {
+				loadingInitialData.value = false;
+			}
+		};
+
+		const submitForm = async () => {
+			isSubmitting.value = true;
+			errors.value = {};
 			successMessage.value = '';
 			errorMessage.value = '';
 
 			try {
-				const response = await axios.post('/api/products/create', form);
-				successMessage.value = 'Producto creado exitosamente!';
-				console.log('Producto creado:', response.data);
+				let response;
+				if (isEditing.value) {
+					// Si estamos editando
+					response = await axios.put(`/api/products/${props.productId}`, form);
+          			successMessage.value = 'Producto actualizado exitosamente!';
+				} else {
+					response = await axios.post('/api/products/create', form);
+					successMessage.value = 'Producto creado exitosamente!';
+				}
+				// console.log('Producto creado:', response.data);				
 
-				// Opcional: Limpiar el formulario después de un éxito
-				form.main_image_url = '';
-				form.status = 'inactive';
-				form.type = 'simple';
-				form.translations.es.name = '';
-				form.translations.es.description = '';
-				form.price = 0.00;
-
-				// Redirigir al listado de productos después de un breve delay
+				// Redirigir al listado de productos
 				setTimeout(() => {
 					router.push('/');
 				}, 1500);
@@ -141,20 +194,41 @@ export default {
 					errorMessage.value = error.response.data.message || 'No tienes permiso para realizar esta acción.';
 				}
 				else {
-					errorMessage.value = 'Ocurrió un error al crear el producto. Inténtalo de nuevo.';
+					errorMessage.value = `Ocurrió un error al ${isEditing.value ? 'actualizar' : 'crear'} el producto. Inténtalo de nuevo.`;
 				}
 			} finally {
-				loading.value = false;
+				isSubmitting.value = false;
 			}
 		};
 
+		// Cuando el componente se inicia o el productId cambia
+		onMounted(() => {
+			if (isEditing.value) {
+				fetchProductData(props.productId);
+			} else {				
+				resetForm(); // Limpiar el formulario si estamos en modo creación
+			}
+		});
+
+		// Observa si el productId de la ruta cambia
+		watch(() => props.productId, (newId) => {
+			if (newId) { 
+				fetchProductData(newId);
+			} else { // Si el ID es null (pasamos a modo creación)
+				resetForm();
+			}
+		});
+
 		return {
 			form,
-			loading,
+			isEditing,
+			loadingInitialData,
+			isSubmitting,
 			errors,
 			successMessage,
 			errorMessage,
-			createProduct,
+			fetchError,
+			submitForm,
 		};
 	},
 };
@@ -163,17 +237,17 @@ export default {
 <style scoped>
 .product-create-form {
 	max-width: 800px;
-	margin: 20px auto;
-	padding: 30px;
+	margin: 1.25em auto;
+	padding: 1.75empx;
 	background-color: #fff;
-	border-radius: 8px;
+	border-radius: 0.5em;
 	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 h1 {
 	text-align: center;
 	color: #333;
-	margin-bottom: 30px;
+	margin-bottom: 1.75em;
 	font-size: 2em;
 }
 
