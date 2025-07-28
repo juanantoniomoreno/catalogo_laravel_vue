@@ -16,6 +16,10 @@
                     <h2>{{ product.name }}</h2>
                     <p class="product-description">{{ product.description }}</p>
                     <p class="product-price">{{ product.price ?? 'N/A' }}</p>
+                    <p class="product-status">Estado: {{ product.status }}</p>
+                    <router-link :to="{ name: 'ProductEditForm', params: { productId: product.id } }" class="edit-button">
+                        Editar
+                    </router-link>
                 </div>
             </div>
         </div>
@@ -84,6 +88,7 @@ export default {
     width: 100%;
     height: 200px;
     object-fit: cover;
+    object-position: center;
     border-bottom: 1px solid #eee;
 }
 
@@ -123,5 +128,19 @@ export default {
     padding: 10px;
     border-radius: 5px;
     margin-bottom: 15px;
+}
+
+.edit-button {
+  display: inline-block;
+  background-color: #007bff;
+  color: white;
+  padding: 0.5em 1em;
+  border-radius: 5px;
+  text-decoration: none;
+  margin-top: 0.5em;
+  transition: background-color 0.3s ease;
+}
+.edit-button:hover {
+  background-color: #0056b3;
 }
 </style>
