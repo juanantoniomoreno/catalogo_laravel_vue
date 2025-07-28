@@ -18,24 +18,21 @@ class ProductController extends Controller
     {
         // Carga los productos con sus traducciones, imágenes
         $products = Product::with([
-            'translations' => function ($query) {
-                // Obtener solo la traducción del idioma actual
+            'translations' => function ($query) {                
                 $query->where('locale', app()->getLocale());
             },
             'images'
         ])->get();
 
         
-        // Mapea los productos para incluir el nombre y descripción traducidos directamente
-        // y para asegurarse de que las relaciones estén correctamente formateadas.
-        $products = $products->map(function ($product) {
+        // Mapea los productos para incluir el nombre y descripción traducidos directamente        
+        $products = $products->map(function ($product) {            
+            $translation            = $product->translations->first();
+            $product->name          = $translation ? $translation->name : '-';
+            $product->description   = $translation ? $translation->description : '-';
+            unset($product->translations);
             
-            $product->name          = $product->name; // Usará el accessor que busca la traducción
-            $product->description   = $product->description; // Usará el accessor que busca la traducción
-            unset($product->translations); // Opcional: elimina la relación cruda de translations            
-            
-            $product->images = $product->images ?: [];            
-            
+            $product->images = $product->images ?: [];                        
             return $product;
         });               
 
@@ -95,52 +92,51 @@ class ProductController extends Controller
     {
         // 1. Validación de los datos del producto
         $validatedProductData = $request->validate([
-            'main_image_url' => 'nullable|url|max:255',
-            'status' => 'required|string|in:' . Product::STATUS_ACTIVE . ',' . Product::STATUS_INACTIVE,
-            'type' => 'required|string|in:' . Product::TYPE_SIMPLE . ',' . Product::TYPE_OPTION_GROUP . ',' . Product::TYPE_PACK,
+            'main_image_url'    => 'nullable|url|max:255',
+            'status'            => 'required|string|in:' . Product::STATUS_ACTIVE . ',' . Product::STATUS_INACTIVE,
+            'type'              => 'required|string|in:' . Product::TYPE_SIMPLE . ',' . Product::TYPE_OPTION_GROUP . ',' . Product::TYPE_PACK,
             // Validación para las traducciones anidadas
-            'translations.es.name' => 'required|string|max:255',
-            'translations.es.description' => 'nullable|string',            
+            'translations.es.name'          => 'required|string|max:255',
+            'translations.es.description'   => 'nullable|string',            
             // Validación para el precio
             'price' => 'required|numeric|min:0'            
         ]);
 
-        try {
-            // Usar una transacción para asegurar la consistencia de los datos
+        try {            
             DB::beginTransaction();
 
-            // 2. Crear el Producto principal
+            // Crear el Producto principal
             $product = Product::create([
                 'main_image_url' => $validatedProductData['main_image_url'] ?? null,
-                'status' => $validatedProductData['status'],
-                'type' => $validatedProductData['type'],
-                'price' => $validatedProductData['price'],
+                'status'         => $validatedProductData['status'],
+                'type'           => $validatedProductData['type'],
+                'price'          => $validatedProductData['price'],
             ]);            
 
-            // 3. Crear la Traducción del Producto (para ES en este caso)
+            // Crear la Traducción del Producto (para ES en este caso)
             $product->translations()->create([
-                'locale' => 'es', // Hardcoded a 'es' para este formulario simple
-                'name' => $validatedProductData['translations']['es']['name'],
+                'locale'      => 'es', 
+                'name'        => $validatedProductData['translations']['es']['name'],
                 'description' => $validatedProductData['translations']['es']['description'] ?? null,                
             ]);           
 
             DB::commit();            
 
-            // Retornar el producto creado con sus relaciones para confirmación
             $product->load('translations');
-            // Formatear el producto para el frontend si es necesario, como en 'index' o 'show'
-            $product->name = $product->name; // Usa el accessor
-            $product->description = $product->description; // Usa el accessor
+
+            // Formatear el producto para el frontend
+            $product->name          = $product->name; 
+            $product->description   = $product->description; 
             unset($product->translations); 
 
-            return response()->json($product, 201); // 201 Created
+            return response()->json($product, 201);
         } catch (\Exception $e) {
             DB::rollBack();
             // Log the error for debugging
             \Log::error('Error creating product: ' . $e->getMessage(), ['trace' => $e->getTraceAsString()]);
             return response()->json([
-                'message' => 'Error al crear el producto.', 
-                'error' => $e->getMessage()
+                'message'   => 'Error al crear el producto.', 
+                'error'     => $e->getMessage()
             ], 500);
         }
     }

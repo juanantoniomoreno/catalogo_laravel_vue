@@ -13,10 +13,10 @@
 
 <style>
 nav {
-    padding: 10px;
+    padding: 0.6em;
     background-color: #eee;
 }
 nav a {
-    margin-right: 10px;
+    margin-right: 0.6em;
 }
 </style>

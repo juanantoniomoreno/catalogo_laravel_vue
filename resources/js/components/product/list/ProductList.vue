@@ -1,126 +1,127 @@
 <template>
     <div class="product-list">
-      <h1>Listado de Productos</h1>
-      <p v-if="loading">Cargando productos...</p>
-      <p v-if="error" class="error-message">{{ error }}</p>
-  
-      <div v-if="!loading && products.length === 0">
-        <p>No hay productos disponibles.</p>
-      </div>
-  
-      <div v-else class="products-grid">
-        <div v-for="product in products" :key="product.id" class="product-card">
-          <img :src="product.main_image_url || 'https://via.placeholder.com/150'" alt="Imagen del producto" class="product-image">
-          <div class="product-details">
-            <h2>{{ product.name }}</h2>
-            <p class="product-description">{{ product.description }}</p>
-            <p class="product-price">{{ product.price ?? 'N/A' }}</p>            
+        <h1>Listado de Productos</h1>
+        <p v-if="loading">Cargando productos...</p>
+        <p v-if="error" class="error-message">{{ error }}</p>
+
+        <div v-if="!loading && products.length === 0">
+            <p>No hay productos disponibles.</p>
+        </div>
+
+        <div v-else class="products-grid">
+            <div v-for="product in products" :key="product.id" class="product-card">
+                <img :src="product.main_image_url || 'https://via.placeholder.com/150'" alt="Imagen del producto"
+                    class="product-image">
+                <div class="product-details">
+                    <h2>{{ product.name }}</h2>
+                    <p class="product-description">{{ product.description }}</p>
+                    <p class="product-price">{{ product.price ?? 'N/A' }}</p>
+                </div>
             </div>
         </div>
-      </div>
     </div>
-  </template>
-  
-  <script>
-  import { ref, onMounted } from 'vue';
-  import axios from 'axios';
-  
-  export default {
+</template>
+
+<script>
+import { ref, onMounted } from 'vue';
+import axios from 'axios';
+
+export default {
     setup() {
-      const products = ref([]);
-      const loading = ref(true);
-      const error = ref(null);
-  
-      const fetchProducts = async () => {
-        try {
-          const response = await axios.get('/api/products');
-          console.log('API Response data for ProductList:', response.data); // Depuración
-          products.value = response.data;
-        } catch (err) {
-          error.value = 'Error al cargar los productos. Por favor, inténtalo de nuevo más tarde.';
-          console.error('Error fetching products:', err);
-        } finally {
-          loading.value = false;
-        }
-      };
-  
-      onMounted(fetchProducts);
-  
-      return {
-        products,
-        loading,
-        error
-      };
+        const products = ref([]);
+        const loading = ref(true);
+        const error = ref(null);
+
+        const fetchProducts = async () => {
+            try {
+                const response = await axios.get('/api/products');
+                console.log('API Response data for ProductList:', response.data); // Depuración
+                products.value = response.data;
+            } catch (err) {
+                error.value = 'Error al cargar los productos. Por favor, inténtalo de nuevo más tarde.';
+                console.error('Error fetching products:', err);
+            } finally {
+                loading.value = false;
+            }
+        };
+
+        onMounted(fetchProducts);
+
+        return {
+            products,
+            loading,
+            error
+        };
     }
-  };
-  </script>
-  
-  <style scoped>
-  .product-list {
+};
+</script>
+
+<style scoped>
+.product-list {
     padding: 20px;
     max-width: 960px;
     margin: 0 auto;
-  }
-  
-  .products-grid {
+}
+
+.products-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 20px;
-  }
-  
-  .product-card {
+}
+
+.product-card {
     background-color: #fff;
     border: 1px solid #ddd;
     border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     overflow: hidden;
     display: flex;
     flex-direction: column;
     padding-bottom: 15px;
-  }
-  
-  .product-image {
+}
+
+.product-image {
     width: 100%;
     height: 200px;
     object-fit: cover;
     border-bottom: 1px solid #eee;
-  }
-  
-  .product-details {
+}
+
+.product-details {
     padding: 15px;
-  }
-  
-  .product-details h2 {
+}
+
+.product-details h2 {
     font-size: 1.4em;
     margin-top: 0;
     margin-bottom: 10px;
     color: #333;
-  }
-  
-  .product-description {
+}
+
+.product-description {
     font-size: 0.9em;
     color: #666;
     margin-bottom: 10px;
-  }
-  
-  .product-price {
+}
+
+.product-price {
     font-size: 1.2em;
     font-weight: bold;
     color: #007bff;
     margin-bottom: 5px;
-  }
-  
-  .product-status {
+}
+
+.product-status {
     font-size: 0.8em;
     color: #888;
-  }
-  
-  .error-message {
+}
+
+.error-message {
     color: #dc3545;
     background-color: #f8d7da;
     border: 1px solid #f5c6cb;
     padding: 10px;
     border-radius: 5px;
     margin-bottom: 15px;
-  }
-  </style>
+}
+</style>
