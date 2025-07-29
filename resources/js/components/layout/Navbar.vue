@@ -1,18 +1,18 @@
 <template>
     <nav class="navbar">
         <div class="navbar-brand">
-            <router-link to="/" class="navbar-logo">
+            <router-link to="/products/simple/list" class="navbar-logo">
                 Mi Tienda de Licencias
             </router-link>
         </div>
         <ul class="navbar-nav">
             <li class="nav-item">
-                <router-link to="/" class="nav-link">
+                <router-link to="/products/simple/list" class="nav-link">
                     Productos
                 </router-link>
             </li>
             <li class="nav-item">
-                <router-link to="/packs/list" class="nav-link">
+                <router-link to="/products/packs/list" class="nav-link">
                     Packs
                 </router-link>
             </li>

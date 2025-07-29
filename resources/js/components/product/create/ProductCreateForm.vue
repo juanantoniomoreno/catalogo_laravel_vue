@@ -1,5 +1,5 @@
 <template>
-	<h1>{{ isEditing ? 'Editar Producto' : 'Crear Nuevo Producto' }}</h1>
+	<h1>{{ isEditing ? ('Editar ' + listTitle) : ('Crear Nuevo ' + listTitle) }}</h1>
 	<div class="product-create-form">
 
 		<div v-if="loadingInitialData" class="loading-message">Cargando datos del producto...</div>
@@ -101,8 +101,10 @@
 			</fieldset>
 
 			<button type="submit" :disabled="isSubmitting" class="submit-button">
-				{{ isSubmitting ? (isEditing ? 'Actualizando...' : 'Creando...') : (isEditing ? 'Actualizar Producto' :
-					'Crear Producto') }}
+				{{ isSubmitting 
+					? (isEditing ? 'Actualizando...' : 'Creando...') 
+					: (isEditing ? `Actualizar ${listTitle}` : `Crear ${listTitle}`) 
+				}}
 			</button>
 		</form>
 	</div>
@@ -150,7 +152,17 @@ export default {
 		const fetchError = ref(null);
 		const availableProducts = ref([]);
 
-		const isEditing = computed(() => Boolean(props.productId));		
+		const isEditing = computed(() => Boolean(props.productId));	
+
+		// Título
+		const listTitle = computed(() => {
+            let typeItem = 'Producto';
+
+            if (form.type === 'pack') {
+                typeItem = 'Pack';
+            }
+            return typeItem;
+        });
 
 		// Función para obtener todos los productos que NO sean packs, para usarlos como ítems
 		const fetchAvailableProducts = async () => {
@@ -205,10 +217,10 @@ export default {
 				}
 
 				// Si es un pack, poblar pack_items
-				if (productData.type === 'pack' && productData.items) {
-					form.pack_products = productData.items.map(item => ({
+				if (productData.type === 'pack' && productData.pack_products) {
+					form.pack_products = productData.pack_products.map(item => ({
 						product_id: item.id,
-						quantity: item.quantity,
+						quantity: item.pivot.quantity,
 					}));
 				} else {
 					form.pack_products = []; // Asegurarse de que esté vacío si no es un pack
@@ -277,7 +289,7 @@ export default {
 			if (isEditing.value) {
 				fetchProductData(props.productId);
 			} else {
-				resetForm(); // Limpiar el formulario si estamos en modo creación
+				resetForm();
 			}
 		});
 
@@ -285,24 +297,25 @@ export default {
 		watch(() => props.productId, (newId) => {
 			if (newId) {
 				fetchProductData(newId);
-			} else { // Si el ID es null (pasamos a modo creación)
+			} else { 
 				resetForm();
 			}
 		});
 
 		return {
+			availableProducts,
+			errors,
+			errorMessage,
 			form,
 			isEditing,
-			loadingInitialData,
 			isSubmitting,
-			errors,
+			loadingInitialData,
 			successMessage,
-			errorMessage,
-			fetchError,
-			availableProducts, // Exponer para el template
-			submitForm,
 			addPackItem,
+			fetchError,
+			listTitle,
 			removePackItem,
+			submitForm,
 		};
 	},
 };

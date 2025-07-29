@@ -51,7 +51,7 @@ class ProductController extends Controller
     {
         // Obtiene el valor del parámetro de consulta 'filter_type'
         // Si no se proporciona, por defecto es null
-        $filterType = $request->query('type', null);
+        $filterType = $request->query('type', null);        
         
         $productsQuery = Product::with([
             'translations' => function ($query) {
@@ -59,18 +59,18 @@ class ProductController extends Controller
                 $query->where('locale', app()->getLocale());
             },
             'images'
-        ])
-        ->where('status', Product::STATUS_ACTIVE);
+        ]);
+        // ->where('status', Product::STATUS_ACTIVE);
 
         // Aplica el filtro de tipo condicionalmente
-        if ($filterType) {
-            // Filtra por productos que son de tipo 'simple'
+        if ($filterType) {            
             $productsQuery->where('type', $filterType);
-        }        
+        }   
 
         // Ejecuta la consulta y obtiene los productos
-        $products = $productsQuery->get();        
-
+        $products = $productsQuery->get();    
+        
+        
         // Mapea los productos para incluir el nombre, descripción y slug traducidos directamente
         $products = $products->map(function ($product) {
             $translation = $product->translations->first();
@@ -78,7 +78,7 @@ class ProductController extends Controller
             $product->description = $translation ? $translation->description : null;            
             unset($product->translations);
             return $product;
-        });
+        });        
 
         return response()->json($products);
     }
@@ -98,11 +98,11 @@ class ProductController extends Controller
             'options.translations' => function ($query) {
                 $query->where('locale', app()->getLocale());
             },
-            'options.price',
+            // 'options.price',
             'packProducts.translations' => function ($query) {
                 $query->where('locale', app()->getLocale());
             },
-            'packProducts.price',
+            // 'packProducts.price',
             'offers'
         ]);
 
@@ -188,7 +188,7 @@ class ProductController extends Controller
 
             // Si es un pack, añadir los detalles de los ítems directamente al objeto principal
             if ($product->type === Product::TYPE_PACK) {
-                $product->items = $product->packProducts->map(function($item) {
+                $product->pack_products = $product->packProducts->map(function($item) {
                     $itemTranslation = $item->translations->first();
                     return [
                         'id' => $item->id,
@@ -239,22 +239,52 @@ class ProductController extends Controller
                 ]
             );
 
+            // En caso de que el producto sea un pack
+            if ($product->type === Product::TYPE_PACK) {
+                $packProducts = [];
+                foreach ($validatedData['pack_products'] as $item) {
+                    $packProducts[$item['product_id']] = ['quantity' => $item['quantity']];
+                } 
+
+                // Adjuntar los productos al pack
+                $product->packProducts()->sync($packProducts);
+            }
+
             DB::commit();
 
             // Carga las relaciones para la respuesta
             $product->load([
                 'translations' => function ($query) {
                     $query->where('locale', app()->getLocale());
+                },
+                'packProducts' => function ($query) {
+                    $query->with(['translations' => function($subQuery) {
+                        $subQuery->where('locale', app()->getLocale());
+                    }]);
                 }
             ]);
 
             // Formatear el producto para el frontend
-            $translation    = $product->translations->first();
-
+            $translation            = $product->translations->first();
             $product->name          = $translation ? $translation->name : null;
             $product->description   = $translation ? $translation->description : null;
-
             unset($product->translations);
+
+            // Si es un pack, añadir los detalles de los ítems directamente al objeto principal
+            if ($product->type === Product::TYPE_PACK) {
+                $product->pack_products = $product->packProducts->map(function($item) {
+                    $itemTranslation = $item->translations->first();
+                    return [
+                        'id' => $item->id,
+                        'name' => $itemTranslation ? $itemTranslation->name : null,
+                        'quantity' => $item->pivot->quantity,
+                        'main_image_url' => $item->main_image_url,
+                    ];
+                });
+                unset($product->packProducts);
+            }
+
+
             return response()->json($product);
         } catch (AuthorizationException $e) {
             DB::rollBack();

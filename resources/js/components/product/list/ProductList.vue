@@ -1,13 +1,14 @@
 <template>
-    <h1>Listado de Productos</h1>
+    <h1>Listado de {{ listTitle }}</h1>
     <div class="product-list">
         <p v-if="loading">Cargando productos...</p>
         <p v-if="error" class="error-message">{{ error }}</p>
 
-        <router-link to="/products/create" class="create-product-button">
+        <router-link v-if="filterType === 'simple'" to="/products/create" class="create-product-button">
             Crear Nuevo Producto
         </router-link>
-        <router-link :to="{ path: '/products/create', query: { type: 'pack' } }" class="create-product-button">
+        <router-link v-if="filterType === 'pack'" :to="{ path: '/products/create', query: { type: 'pack' } }"
+            class="create-product-button">
             Crear Nuevo Pack
         </router-link>
 
@@ -40,19 +41,41 @@
 </template>
 
 <script>
-import { ref, onMounted } from 'vue';
+import { ref, watch, computed } from 'vue';
 import axios from 'axios';
 
 export default {
-    setup() {
+    props: {        
+        filterType: {
+            type: String
+        }
+    },
+    setup(props) {
         const products = ref([]);
         const loading = ref(true);
         const error = ref(null);
 
+        const listTitle = computed(() => {
+            let typeItems = 'Productos';
+
+            if (props.filterType === 'pack') {
+                typeItems = 'Packs';
+            }
+            return typeItems;
+        });
+
         const fetchProducts = async () => {
             try {
-                const response = await axios.get('/api/products');
-                console.log('API Response data for ProductList:', response.data); // Depuración
+                let apiUrl = '/api/products';
+                const params = {};
+
+                if (props.filterType) {
+                    apiUrl = '/api/products/filtered';
+                    params.type = props.filterType
+                }
+
+                const response = await axios.get(apiUrl, { params });
+                // console.log('API Response data for ProductList:', response.data); 
                 products.value = response.data;
             } catch (err) {
                 error.value = 'Error al cargar los productos. Por favor, inténtalo de nuevo más tarde.';
@@ -61,8 +84,6 @@ export default {
                 loading.value = false;
             }
         };
-
-        onMounted(fetchProducts);
 
         const confirmDelete = async (productId) => {
             if (confirm('¿Estás seguro de que quieres eliminar este producto? Esta acción no se puede deshacer.')) {
@@ -90,14 +111,19 @@ export default {
             }
         };
 
+        // Vuelve a cargar productos cada vez que filterType cambie
+        watch(() => props.filterType, fetchProducts, { immediate: true });
+
         return {
-            products,
-            loading,
             error,
-            confirmDelete
+            filterType: computed(() => props.filterType),
+            loading,
+            listTitle,
+            products,
+            confirmDelete,
         };
     }
-};
+}
 </script>
 
 <style scoped>

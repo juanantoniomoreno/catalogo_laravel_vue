@@ -5,8 +5,15 @@ import ProductCreateForm from '../components/product/create/ProductCreateForm.vu
 const routes = [
     {
         path: '/',
+        redirect: '/products/simple/list'
+      },
+    {
+        path: '/products/simple/list',
         name: 'ProductList',
-        component: ProductList
+        component: ProductList,
+        props: { 
+            filterType: 'simple'
+        }
     },
     {
         path: '/products/create',
@@ -22,7 +29,15 @@ const routes = [
         name: 'ProductEditForm',
         component: ProductCreateForm,
         props: true
-    }
+    },
+    {
+        path: '/products/packs/list',
+        name: 'ProductPackList',
+        component: ProductList,
+        props: { 
+            filterType: 'pack'
+        }
+    },
     
     // Añade más rutas aquí
     // { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFound } // Opcional: para rutas no encontradas
