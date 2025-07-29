@@ -1,8 +1,11 @@
 <?php
 
+use App\Http\Controllers\Api\OfferController;
+use App\Http\Controllers\Api\OptionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\ProductController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -43,6 +46,12 @@ Route::post('/products/create', [ProductController::class, 'store']);
 // 4. Ruta general
 // Obtener todos los productos
 Route::get('/products', [ProductController::class, 'index']);
+
+// --- Offer Routes ---
+Route::apiResource('offers', OfferController::class);
+
+// --- Option Routes ---
+Route::apiResource('options', OptionController::class);
 
 
 

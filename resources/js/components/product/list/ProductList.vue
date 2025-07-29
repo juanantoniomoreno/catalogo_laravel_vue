@@ -1,9 +1,6 @@
 <template>
     <h1>Listado de {{ listTitle }}</h1>
-    <div class="product-list">
-        <p v-if="loading">Cargando productos...</p>
-        <p v-if="error" class="error-message">{{ error }}</p>
-
+    <div class="product-list">        
         <router-link v-if="filterType === 'simple'" to="/products/create" class="create-product-button">
             Crear Nuevo Producto
         </router-link>
@@ -12,6 +9,8 @@
             Crear Nuevo Pack
         </router-link>
 
+        <p v-if="loading">Cargando productos...</p>
+        <p v-if="error" class="error-message">{{ error }}</p>
         <div v-if="!loading && products.length === 0">
             <p>No hay productos disponibles.</p>
         </div>
@@ -45,7 +44,7 @@ import { ref, watch, computed } from 'vue';
 import axios from 'axios';
 
 export default {
-    props: {        
+    props: {
         filterType: {
             type: String
         }
@@ -128,7 +127,7 @@ export default {
 
 <style scoped>
 .product-list {
-    padding: 20px;
+    padding: 1.25em;
     max-width: 960px;
     margin: 0 auto;
 }
@@ -198,19 +197,24 @@ export default {
 
 .product-actions {
     display: flex;
-    gap: 10px;
-    /* Espacio entre los botones */
-    margin-top: 15px;
+    justify-content: space-around;
+    padding: 0.8em 1em 1em;
+    border-top: 1px solid #eee;
+    background-color: #f7f7f7;
 }
 
 .edit-button,
 .delete-button {
+    flex: 1;
     padding: 0.5em 1em;
+    margin: 0 0.25em;
+    border: none;
     border-radius: 5px;
-    text-decoration: none;
     cursor: pointer;
-    transition: background-color 0.3s ease;
     font-size: 0.9em;
+    text-decoration: none;
+    text-align: center;
+    transition: background-color 0.3s ease;
 }
 
 .edit-button {
@@ -239,11 +243,8 @@ export default {
     color: white;
     padding: 0.25em 1.25em;
     margin-right: 0.5em;
-    border-radius: 5px;
-    text-decoration: none;
-    /* Eliminar el subrayado del enlace */
-    margin-bottom: 20px;
-    /* Espacio debajo del botón antes de la lista */
+    margin-bottom: 1.25em;
+    border-radius: 5px;    
     transition: background-color 0.3s ease;
     font-weight: bold;
 }

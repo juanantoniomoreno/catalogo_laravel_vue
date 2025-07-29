@@ -9,8 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Offer extends Model
 {
     use HasFactory;
-
-    // Constantes para estados de oferta (en lugar de Enums)
+    
     public const STATUS_ACTIVE = 'active';
     public const STATUS_INACTIVE = 'inactive';
     public const STATUS_SCHEDULED = 'scheduled';

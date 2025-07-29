@@ -16,6 +16,16 @@
                     Packs
                 </router-link>
             </li>
+            <li class="nav-item">
+                <router-link to="/offers" class="nav-link">
+                    Ofertas
+                </router-link>
+            </li>
+            <li class="nav-item">
+                <router-link to="/options" class="nav-link">
+                    Opciones
+                </router-link>
+            </li>
         </ul>
         <div class="user-info">
             <span v-if="currentUser">Hola, {{ currentUser.name }} ({{ currentUser.role }})</span>

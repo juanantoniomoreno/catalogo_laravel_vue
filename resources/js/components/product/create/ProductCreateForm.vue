@@ -136,8 +136,7 @@ export default {
 			translations: {
 				es: {
 					name: '',
-					description: '',
-					slug: '',
+					description: '',					
 				},
 			},
 			price: 0.00,
@@ -248,14 +247,12 @@ export default {
 				} else {					
 					response = await axios.post('/api/products/create', form);
 					successMessage.value = 'Producto creado exitosamente!';
-				}
-				// console.log('Producto creado:', response.data);				
+				}							
 
 				// Redirigir al listado de productos
 				setTimeout(() => {
 					router.push('/');
-				}, 1500);
-
+				}, 1000);
 			} catch (error) {
 				console.error('Error al crear el producto:', error);
 				if (error.response && error.response.status === 422) {
