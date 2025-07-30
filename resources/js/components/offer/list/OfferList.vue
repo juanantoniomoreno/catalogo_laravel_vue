@@ -132,7 +132,7 @@ export default {
 }
 
 .create-button:hover {
-    background-color: #218838;
+    background-color: var(--color-success-hover);
 }
 
 .loading-message,

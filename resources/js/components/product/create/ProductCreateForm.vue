@@ -404,7 +404,7 @@ textarea.form-control {
 }
 
 .submit-button:hover:not(:disabled) {
-	background-color: #218838;
+	background-color: var(--color-success-hover);
 }
 
 .submit-button:disabled {

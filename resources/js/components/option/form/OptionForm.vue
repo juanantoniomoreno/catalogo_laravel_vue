@@ -328,7 +328,7 @@ h3 {
 }
 
 .form-actions button:hover:not(:disabled) {
-    background-color: #218838;
+    background-color: var(--color-success-hover);
 }
 
 .form-actions button:disabled {

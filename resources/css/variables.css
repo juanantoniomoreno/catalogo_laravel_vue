@@ -3,7 +3,8 @@
     --color-primary: #007bff;         
     --color-primary-hover:#0056b3;
     --color-secondary: #6c757d;       
-    --color-success: #28a745;         
+    --color-success: #28a745;
+    --color-success-hover: #218838;         
     --color-warning: #ffc107;         
     --color-danger: #dc3545;          
     --color-danger-hover: #c82333;          
@@ -20,7 +21,8 @@
     --color-border-error: #f5c6cb;    
     --color-background-error: #f8d7da;
     --color-background-info: #e0f7fa; 
-    --color-text-info: #00796b;       
+    --color-text-info: #00796b;  
+    --color-button-disabled: #94d3a2;      
   
     /* --- Espaciado (Padding & Margins) --- */
     --spacing-xs: 0.25em;

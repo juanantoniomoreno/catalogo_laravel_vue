@@ -198,9 +198,8 @@ export default {
 .product-actions {
     display: flex;
     justify-content: space-around;
-    padding: var(--spacing-sm) var(--spacing-lg) var(--spacing-lg);    
-    border-top: 1px solid var(--color-border-medium);    
-    background-color: var(--color-background-gray);    
+    padding: var(--spacing-sm) var(--spacing-lg) var(--spacing-lg);        
+    background-color: var(--color-background-lighter);    
 }
 
 .edit-button,
@@ -250,6 +249,6 @@ export default {
 }
 
 .create-product-button:hover {
-    background-color: #218838;
+    background-color: var(--color-success-hover);
 }
 </style>

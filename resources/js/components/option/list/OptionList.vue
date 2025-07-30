@@ -127,7 +127,7 @@ export default {
 }
 
 .create-button:hover {
-    background-color: #218838;
+    background-color: var(--color-success-hover);
 }
 
 .loading-message,
@@ -160,7 +160,7 @@ export default {
     background-color: #fefefe;
     border: 1px solid var(--color-border-medium);
     border-radius: var(--spacing-sm);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    box-shadow: var(--box-shadow-card);
     overflow: hidden;
     display: flex;
     flex-direction: column;
@@ -169,7 +169,7 @@ export default {
 
 .option-card:hover {
     transform: translateY(-4px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    box-shadow: var(--box-shadow-card-hover);
 }
 
 .card-image {
@@ -190,26 +190,25 @@ export default {
 }
 
 .card-content {
-    padding: 1em;
+    padding: var(--spacing-lg);
     flex-grow: 1;
 }
 
 .card-title {
     font-size: var(--font-size-h3);
     font-weight: bold;
-    color: #333;
+    color: var(--color-text-dark);
     margin-bottom: var(--spacing-sm);
 }
 
 .card-description {
-    font-size: 1em;
+    font-size: var(--font-size-base);
     color: var(--color-text-light);
     margin-bottom: var(--spacing-md);
     line-height: 1.4;
     height: 2.75em;
     overflow: hidden;
-    text-overflow: ellipsis;
-    /* Añade puntos suspensvar(--spacing-sm)si se corta */
+    text-overflow: ellipsis;    
     display: -webkit-box;
     -webkit-line-clamp: 2;
     /* Limita a 2 líneas */
