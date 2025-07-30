@@ -1,218 +1,171 @@
-Gestor de Catálogo de Licencias Digitales
 
-Este proyecto Laravel implementa un sistema para la gestión de un catálogo de licencias de productos digitales, incluyendo soporte multi-idioma, gestión de precios, opciones de productos, packs y ofertas.
+# 🚀 Administración de Productos, Ofertas y Opciones
 
-🚀 Características Principales
-Gestión de Productos: Define productos base con su estado (activo/inactivo) y tipo (simple, grupo_opciones, pack).
+Este proyecto es una aplicación web que combina un **backend robusto desarrollado con Laravel** (PHP) y un **frontend dinámico construido con Vue.js 3** (JavaScript), utilizando Vite para un desarrollo rápido y eficiente. Está diseñado para la gestión de productos, ofertas y opciones, incluyendo soporte para traducciones en múltiples idiomas.
 
-Soporte Multi-idioma (i18n): Nombres, descripciones y slugs de productos y opciones disponibles en múltiples idiomas.
+La aplicación permite:
 
-Imágenes por URL: Almacenamiento eficiente de imágenes (principal y galería) mediante URLs, delegando el almacenamiento de archivos al sistema de ficheros o CDN.
+  * Gestionar productos con diferentes tipos (simples, grupos de opciones, packs), estados e imágenes.
+  * Administrar ofertas especiales vinculadas a productos.
+  * Controlar opciones específicas para productos de tipo 'grupo de opción', también con soporte para traducciones.
+  * Todo ello a través de una API RESTful en el backend y una interfaz de usuario intuitiva en el frontend.
 
-Precios Flexibles: Precios base para productos y precios específicos para cada opción.
+-----
 
-Opciones de Producto: Permite definir variantes para un producto principal (ej., diferentes versiones de un software).
+## 💻 Requisitos del Sistema
 
-Packs de Productos: Crea paquetes que agrupan múltiples productos individuales con cantidades específicas.
+Antes de empezar, asegúrate de tener instalado lo siguiente en tu sistema:
 
-Gestión de Ofertas: Define ofertas con precios especiales y rangos de fechas para productos o packs.
+  * **PHP**: Versión 8.2 o superior (la que uses para Laravel).
+  * **Composer**: Gestor de dependencias de PHP.
+  * **Node.js**: Versión 18 o superior (LTS recomendado).
+  * **npm** o **Yarn**: Gestor de paquetes de Node.js (se recomienda Yarn para este proyecto).
+  * **Base de Datos**: MySQL, PostgreSQL, SQLite, etc. (MySQL es común para Laravel).
+  * **Servidor Web (para producción)**: Apache con `mod_rewrite` habilitado o Nginx. Para desarrollo local, `php artisan serve` y Vite son suficientes.
 
-No uso de Enums PHP 8.1+: Los estados y tipos se gestionan mediante cadenas de texto y constantes en los modelos, garantizando compatibilidad.
+-----
 
-🛠️ Requisitos del Sistema
-Asegúrate de tener instalado lo siguiente:
+## ⚙️ Configuración del Proyecto
 
-PHP: >= 8.1 (aunque el código no usa Enums, versiones recientes de Laravel los requieren).
-
-Composer: Gestor de paquetes de PHP.
-
-Node.js & npm/Yarn: Para la gestión de dependencias frontend (Vue.js).
-
-Base de Datos: MySQL (recomendado) u otra base de datos soportada por Laravel (PostgreSQL, SQLite, SQL Server).
-
-⚙️ Instalación y Configuración
 Sigue estos pasos para poner el proyecto en marcha en tu entorno local:
 
-Clonar el repositorio:
+### 1\. Clonar el Repositorio
 
-git clone https://your-repository-url.com
-cd your-project-name
+Primero, clona el repositorio a tu máquina local:
 
-Instalar dependencias de Composer:
+```bash
+git clone <url_del_repositorio>
+cd <nombre_del_directorio_del_proyecto>
+```
+
+### 2\. Configuración del Backend (Laravel)
+
+#### a. Instalación de Dependencias de PHP
+
+Instala las dependencias de Laravel usando Composer:
+
+```bash
 composer install
+```
 
-Configurar el archivo .env:
+#### b. Configuración del Entorno (`.env`)
 
-Copia el archivo de ejemplo:
+Copia el archivo de configuración de ejemplo y genera una clave de aplicación:
+
+```bash
 cp .env.example .env
-
-Genera una clave de aplicación:
 php artisan key:generate
-Abre el archivo .env y configura tus credenciales de base de datos (DB_CONNECTION, DB_HOST, DB_PORT, DB_DATABASE, DB_USERNAME, DB_PASSWORD).
+```
 
-Fragmento de código
+Abre el archivo `.env` y configura tu conexión a la base de datos (DB\_DATABASE, DB\_USERNAME, DB\_PASSWORD, etc.):
 
+```env
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
 DB_PORT=3306
 DB_DATABASE=nombre_de_tu_base_de_datos
 DB_USERNAME=tu_usuario_db
 DB_PASSWORD=tu_password_db
+```
 
-Ejecutar migraciones de la base de datos:
-Esto creará todas las tablas necesarias:
+#### c. Ejecutar Migraciones y Seeds (Opcional)
 
+Ejecuta las migraciones para crear las tablas en tu base de datos. Si tienes seeders para datos de prueba, también puedes ejecutarlos:
+
+```bash
 php artisan migrate
-Si quieres una base de datos limpia y poblarla con datos de prueba (si tienes seeders):
+php artisan db:seed # Opcional: Si tienes seeders para datos de prueba
+```
 
-php artisan migrate:fresh --seed
+### 3\. Configuración del Frontend (Vue.js + Vite)
 
-Configurar el enlace simbólico de almacenamiento:
+#### a. Instalación de Dependencias de JavaScript
 
-php artisan storage:link
+Instala las dependencias de Node.js usando Yarn (recomendado) o npm:
 
-Instalar dependencias de Node.js y compilar assets (si usas frontend con Vue.js):
+```bash
+yarn install
+# o si usas npm
+# npm install
+```
 
-npm install
-npm run dev # Para desarrollo
+#### b. Construcción de Assets (Opcional, para producción)
+
+Para construir los assets de frontend para producción:
+
+```bash
+yarn build
 # o
-npm run build # Para producción
-Iniciar el servidor de desarrollo de Laravel:
+# npm run build
+```
 
-Bash
+-----
 
+## ▶️ Levantar el Proyecto en Local
+
+Para tener la aplicación funcionando en tu entorno de desarrollo, necesitarás ejecutar dos comandos simultáneamente: uno para el backend de Laravel y otro para el frontend de Vue/Vite.
+
+### 1\. Iniciar el Servidor de Laravel (Backend)
+
+En una terminal, ve al directorio raíz del proyecto y ejecuta:
+
+```bash
 php artisan serve
-El proyecto estará accesible en http://127.0.0.1:8000 (o el puerto indicado).
+```
 
-📂 Estructura de la Base de Datos
-Aquí se detalla la estructura de las tablas principales y sus relaciones:
+Esto iniciará el servidor de desarrollo de Laravel, generalmente en `http://127.0.0.1:8000`.
 
-products: Productos base.
+### 2\. Iniciar el Servidor de Desarrollo de Vite (Frontend)
 
-product_translations: Nombres, descripciones y slugs de productos por locale. (Relación 1:N con products)
+En **otra terminal**, ve al directorio raíz del proyecto y ejecuta:
 
-product_images: URLs de imágenes de galería de productos. (Relación 1:N con products)
+```bash
+yarn dev
+# o si usas npm
+# npm run dev
+```
 
-product_prices: Precio base de un producto. (Relación 1:1 con products)
+Esto iniciará el servidor de desarrollo de Vite para tu frontend, generalmente en `http://localhost:5173`.
 
-options: Variantes de un producto principal. (Relación 1:N con products)
+### 3\. Acceder a la Aplicación
 
-option_translations: Nombres y descripciones de opciones por locale. (Relación 1:N con options)
+Una vez que ambos servidores estén ejecutándose, abre tu navegador web y navega a la URL del servidor de Laravel:
 
-option_prices: Precio específico de una opción. (Relación 1:1 con options)
+```
+http://127.0.0.1:8000
+```
 
-pack_products: Tabla pivote para packs, relacionando un product de tipo 'pack' con otros products que son sus ítems. (Relación M:N entre products y products)
+Tu aplicación Vue.js se cargará a través de la vista Blade servida por Laravel, y Vite se encargará del Hot Module Replacement (HMR) para los cambios en el frontend.
 
-offers: Detalles de ofertas aplicables a productos. (Relación 1:N con products)
+**Nota sobre los errores 404 al recargar:** Si al recargar una página del frontend (ej. `http://127.0.0.1:8000/products`) obtienes un error 404, es un comportamiento esperado en este entorno de desarrollo. Para solucionarlo, tu `routes/web.php` de Laravel ya incluye una **ruta "catch-all"** (`Route::get('/{any}', ...)->where('any', '.*');`) que redirige todas las peticiones no coincidentes a la vista principal de tu SPA (`welcome.blade.php`), permitiendo a Vue Router manejar la navegación. Asegúrate de que esta ruta esté al final de tu `routes/web.php`.
 
-Puedes visualizar el Diagrama Entidad-Relación (DER) / Relacional en formato Mermaid:
+-----
 
-Fragmento de código
+## 📂 Estructura del Proyecto (Relevante)
 
-erDiagram
-    products {
-        int id PK
-        string main_image_url "URL de la imagen principal"
-        string status "('active', 'inactive')"
-        string type "('simple', 'option_group', 'pack')"
-        timestamp created_at
-        timestamp updated_at
-    }
+  * `app/Models/`: Modelos de Eloquent (`Product`, `Offer`, `Option`, `ProductTranslation`, `OptionTranslation`).
+  * `app/Http/Controllers/Api/`: Controladores API para los recursos (`ProductController`, `OfferController`, `OptionController`).
+  * `app/Http/Requests/`: Form Requests para la validación de peticiones (`StoreProductRequest`, `UpdateProductRequest`, etc.).
+  * `database/migrations/`: Archivos de migración para la base de datos.
+  * `resources/js/`: Código fuente de tu aplicación Vue.js.
+      * `resources/js/app.js`: Punto de entrada principal de Vue.
+      * `resources/js/router/index.js`: Definición de rutas de Vue Router.
+      * `resources/js/components/`: Componentes Vue.js (Navbar, ProductList, ProductForm, OfferList, OfferForm, OptionList, OptionForm).
+  * `routes/api.php`: Rutas de la API RESTful de Laravel.
+  * `routes/web.php`: Rutas web de Laravel, incluyendo la ruta "catch-all" para el frontend.
+  * `public/images/`: (Asegúrate de tener aquí `default_product.png` y `default_option.png` si los utilizas en los componentes).
 
-    product_translations {
-        int id PK
-        int product_id FK
-        string locale "('es', 'it', 'fr', 'en', 'pt')"
-        string name
-        text description
-        string slug
-        timestamp created_at
-        timestamp updated_at
-    }
+-----
 
-    product_images {
-        int id PK
-        int product_id FK
-        string image_url "URL de la imagen de galería"
-        int order
-        timestamp created_at
-        timestamp updated_at
-    }
+## 🛠️ Comandos Útiles
 
-    product_prices {
-        int id PK
-        int product_id FK
-        decimal price
-        string currency
-        timestamp created_at
-        timestamp updated_at
-    }
+  * **Migrar base de datos:** `php artisan migrate`
+  * **Generar nueva migración:** `php artisan make:migration create_xxx_table`
+  * **Generar modelo:** `php artisan make:model Xxx`
+  * **Generar controlador API:** `php artisan make:controller Api/XxxController --api --model=Xxx`
+  * **Generar Form Request:** `php artisan make:request StoreXxxRequest` y `php artisan make:request UpdateXxxRequest`
+  * **Iniciar servidor Laravel:** `php artisan serve`
+  * **Iniciar servidor de desarrollo Vite:** `yarn dev` (o `npm run dev`)
+  * **Compilar assets para producción:** `yarn build` (o `npm run build`)
 
-    options {
-        int id PK
-        int product_id FK "parent_product"
-        string image_url "URL de la imagen de la opción"
-        string status "('active', 'inactive')"
-        timestamp created_at
-        timestamp updated_at
-    }
-
-    option_translations {
-        int id PK
-        int option_id FK
-        string locale
-        string name
-        text description
-        timestamp created_at
-        timestamp updated_at
-    }
-
-    option_prices {
-        int id PK
-        int option_id FK
-        decimal price
-        timestamp created_at
-        timestamp updated_at
-    }
-
-    pack_products {
-        int pack_id FK "FK_products_pack"
-        int product_id FK "FK_products_item"
-        int quantity
-    }
-
-    offers {
-        int id PK
-        int product_id FK "applies_to_product_or_option_or_pack"
-        decimal offer_price
-        datetime start_date
-        datetime end_date
-        string status "('active', 'inactive', 'scheduled', 'expired')"
-        timestamp created_at
-        timestamp updated_at
-    }
-
-    products ||--o{ product_translations : has
-    products ||--o{ product_images : has
-    products ||--o{ product_prices : has
-    products ||--o{ options : has_options
-    options ||--o{ option_translations : has
-    options ||--o{ option_prices : has
-    products }o--o{ pack_products : contains_products_in_pack
-    products ||--o{ offers : has_offers
-👩‍💻 Uso y Desarrollo
-Modelos Eloquent: Los modelos se encuentran en app/Models/ y definen las relaciones de Eloquent para interactuar con la base de datos.
-
-Controladores: Crea controladores en app/Http/Controllers/ para manejar la lógica de negocio y las operaciones CRUD.
-
-Rutas API: Define las rutas para tu API en routes/api.php para interactuar con el frontend.
-
-Gestión de Imágenes: Implementa la lógica para subir imágenes a storage/app/public y guardar sus URLs en la base de datos.
-
-Frontend (Vue.js): Utiliza Vue I18n para la gestión de traducciones en el lado del cliente. Asegúrate de que el frontend consuma las traducciones desde las tablas _translations del backend.
-
-🤝 Contribuciones
-Las contribuciones son bienvenidas. Por favor, abre un "issue" para discutir cambios propuestos o envía un "pull request" con tus mejoras.
-
-📄 Licencia
-Este proyecto está bajo la licencia MIT License.
+-----
