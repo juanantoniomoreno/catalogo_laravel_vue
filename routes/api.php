@@ -26,31 +26,23 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 // --- Rutas para la gestión de productos ---
-
-// 
-// 1. Ruta específica para productos filtrados
+//  Listar productos
 Route::get('/products/filtered', [ProductController::class, 'getFilteredProducts']);
-
-// 2. Rutas genéricas
 // Obtener un producto
 Route::get('/products/{product}', [ProductController::class, 'show']);
 // Actualizar un producto 
 Route::put('/products/{product}', [ProductController::class, 'update']);
 // Elimina un producto 
 Route::delete('/products/{product}', [ProductController::class, 'destroy']);
-
-// 3. Otras rutas específica
 // Crear un nuevo producto
 Route::post('/products/create', [ProductController::class, 'store']);
-
-// 4. Ruta general
 // Obtener todos los productos
 Route::get('/products', [ProductController::class, 'index']);
 
-// --- Offer Routes ---
+// --- Rutas de gestión de ofertas ---
 Route::apiResource('offers', OfferController::class);
 
-// --- Option Routes ---
+// --- Rutas de gestión de opciones ---
 Route::apiResource('options', OptionController::class);
 
 
