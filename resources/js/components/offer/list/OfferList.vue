@@ -108,24 +108,24 @@ export default {
 
 <style scoped>
 .offer-list {
-    max-width: 960px;
+    max-width: var(--max-width-lg);
     margin: 0 auto;
-    padding: 1.25em;
+    padding: var(--spacing-xl);
 }
 
 .header-actions {
-    margin-bottom: 1.25em;
+    margin-bottom: var(--spacing-xl);
     display: flex;
     justify-content: flex-end;
 }
 
 .create-button {
     display: inline-block;
-    background-color: #28a745;
+    background-color: var(--color-success);
     color: white;
-    margin-right: 0.5em;
-    margin-bottom: 1.25em;
-    padding: 0.25em 1.25em;
+    margin-right: var(--spacing-sm);
+    margin-bottom: var(--spacing-xl);
+    padding: var(--spacing-xs) var(--spacing-xl);
     border-radius: 5px;
     transition: background-color 0.3s ease;
     font-weight: bold;
@@ -138,9 +138,9 @@ export default {
 .loading-message,
 .error-message,
 .no-offers-message {
-    padding: 1em;
+    padding: var(--spacing-lg);
     border-radius: 5px;
-    margin-bottom: 1.25em;
+    margin-bottom: var(--spacing-xl);
     text-align: center;
     font-weight: bold;
 }
@@ -169,7 +169,7 @@ export default {
 }
 
 .offer-card {
-    background-color: #ffffff;
+    background-color: var(--color-background-light);
     border: 1px solid #e0e0e0;
     border-radius: 10px;
     overflow: hidden;
@@ -184,7 +184,7 @@ export default {
 }
 
 .offer-details {
-    padding: 1.25em;
+    padding: var(--spacing-xl);
     display: flex;
     flex-direction: column;
     flex-grow: 1;
@@ -194,66 +194,66 @@ export default {
     font-size: 1.6em;
     color: #333;
     margin-top: 0;
-    margin-bottom: 0.75em;
+    margin-bottom: var(--spacing-md);
     line-height: 1.3;
 }
 
 .offer-description {
     color: #666;
-    font-size: 0.95em;
-    margin-bottom: 1em;
+    font-size: var(--font-size-base);
+    margin-bottom: var(--spacing-lg);
     line-height: 1.5;
     flex-grow: 1;
 }
 
 .offer-price {
-    font-size: 1.1em;
+    font-size: var(--font-size-base);
     font-weight: bold;
-    color: #28a745;
-    margin-bottom: 0.75em;
+    color: var(--color-success);
+    margin-bottom: var(--spacing-md);
 }
 
 .offer-dates,
 .offer-status,
 .offer-product {
-    font-size: 0.9em;
+    font-size: var(--font-size-md);
     color: #888;
-    margin-bottom: 0.25em;
+    margin-bottom: var(--spacing-xs);
 }
 
 .offer-actions {
     display: flex;
     gap: 10px;
-    margin-top: 1em;
+    margin-top: var(--spacing-lg);
 }
 
 .edit-button,
 .delete-button {
-    padding: 0.25em 1em;
+    padding: var(--spacing-xs) var(--spacing-lg);
     border-radius: 5px;
-    text-decoration: none;
+    text-decoration: nvar(--spacing-lg);
     cursor: pointer;
     transition: background-color 0.3s ease;
-    font-size: 0.9em;
+    font-size: var(--font-size-md);
 }
 
 .edit-button {
-    background-color: #007bff;
+    background-color: var(--color-primary);
     color: white;
-    border: none;
+    border: nonevar(--spacing-lg);
 }
 
 .edit-button:hover {
-    background-color: #0056b3;
+    background-color: var(--color-primary-hover);
 }
 
 .delete-button {
-    background-color: #dc3545;
+    background-color: var(--color-danger);
     color: white;
     border: none;
 }
 
 .delete-button:hover {
-    background-color: #c82333;
+    background-color: var(--color-danger-hover);
 }
 </style>

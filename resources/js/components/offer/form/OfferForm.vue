@@ -63,8 +63,10 @@
 
 <script>
 import { ref, reactive, onMounted, watch } from 'vue';
-import { useRouter } from 'vue-router';
 import axios from 'axios';
+import { useRouter } from 'vue-router';
+
+import { formatToInputDate, getTodayDate } from '../../../utils/date';
 
 export default {
     name: 'OfferForm',
@@ -92,28 +94,7 @@ export default {
         const loadingProducts = ref(true);
         const errorProducts = ref(null);
         const currentProductName = ref('');
-        const today = ref('');
-
-        // Función para obtener la fecha de hoy en formato YYYY-MM-DD
-        const getTodayDate = () => {
-            const date = new Date();
-            const year = date.getFullYear();
-            const month = String(date.getMonth() + 1).padStart(2, '0');
-            const day = String(date.getDate()).padStart(2, '0');
-            return `${year}-${month}-${day}`;
-        };
-
-        // Formatear fechas
-        const formatToInputDate = (isoDateString) => {
-            if (!isoDateString) return '';
-
-            const date = new Date(isoDateString);            
-            const year = date.getFullYear();
-            const month = String(date.getMonth() + 1).padStart(2, '0');
-            const day = String(date.getDate()).padStart(2, '0');
-
-            return `${year}-${month}-${day}`;
-        };
+        const today = ref('');        
 
         // Fetch active products for the dropdown
         const fetchSimpleProducts = async () => {
@@ -221,29 +202,29 @@ export default {
 <style scoped>
 .offer-form-container {
     max-width: 600px;
-    margin: 1.25em auto;
-    padding: 1.9em;
-    background-color: #fff;
+    margin: var(--spacing-xl) auto;
+    padding: var(--spacing-xl);
+    background-color: var(--color-background-light);
     border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--box-shadow-base);
 }
 
 h1 {
     text-align: center;
-    color: #333;
-    margin-bottom: 1.9em;
+    color: var(--color-text-dark);
+    margin-bottom: var(--spacing-xxl);
     font-size: 2em;
 }
 
 .offer-form .form-group {
-    margin-bottom: 1.25em;
+    margin-bottom: var(--spacing-xl);
 }
 
 .offer-form label {
     display: block;
-    margin-bottom: 0.5em;
+    margin-bottom: var(--spacing-sm);
     font-weight: bold;
-    color: #555;
+    color: var(--color-text-medium);
 }
 
 .offer-form input[type="text"],
@@ -252,10 +233,10 @@ h1 {
 .offer-form textarea,
 .offer-form select {
     width: 100%;
-    padding: 0.65em;
-    border: 1px solid #ddd;
+    padding: var(--spacing-sm);
+    border: 1px solid var(--color-border-light);
     border-radius: 5px;
-    font-size: 1em;
+    font-size: var(--font-size-base);
     box-sizing: border-box;
 }
 
@@ -268,12 +249,12 @@ h1 {
     display: flex;
     justify-content: flex-end;
     gap: 1em;
-    margin-top: 1.9em;
+    margin-top: var(--spacing-xxl);
 }
 
 .form-actions button,
 .form-actions .cancel-button {
-    padding: 0.75em 1.5em;
+    padding: var(--spacing-md) var(--spacing-xl);
     border-radius: 5px;
     font-size: 1em;
     cursor: pointer;
@@ -283,7 +264,7 @@ h1 {
 }
 
 .form-actions button {
-    background-color: #28a745;
+    background-color: var(--color-success);
     color: white;
     border: none;
 }
@@ -298,7 +279,7 @@ h1 {
 }
 
 .form-actions .cancel-button {
-    background-color: #6c757d;
+    background-color: var(--color-secondary);
     color: white;
     border: none;
 }
@@ -308,42 +289,41 @@ h1 {
 }
 
 .error-message {
-    color: #dc3545;
-    font-size: 0.85em;
-    margin-top: 0.25em;
+    color: var(--color-danger);
+    font-size: var(--font-size-sm);
+    margin-top: var(--spacing-xs);
 }
 
 .general-error {
     text-align: center;
-    margin-top: 1.25em;
-    padding: 0.5em;
-    background-color: #f8d7da;
-    border: 1px solid #f5c6cb;
-    /* 1px / 16px */
+    margin-top: var(--spacing-xl);
+    padding: var(--spacing-sm);
+    background-color: var(--color-background-error);
+    border: 1px solid var(--color-border-error);
     border-radius: 5px;
 }
 
 .loading-products-message,
 .error-products-message {
-    font-size: 0.9em;
-    margin-top: 0.25em;
-    padding: 0.25em;
+    font-size: var(--font-size-md);
+    margin-top: var(--spacing-xs);
+    padding: var(--spacing-xs);
     border-radius: 3px;
 }
 
 .loading-products-message {
-    color: #00796b;
-    background-color: #e0f7fa;
+    color: var(--color-text-info);
+    background-color: var(--color-background-info);
 }
 
 .error-products-message {
     color: #721c24;
-    background-color: #f8d7da;
+    background-color: var(--color-background-error);
 }
 
 .info-text {
-    font-size: 0.85em;
-    color: #888;
-    margin-top: 0.25em;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-lighter);
+    margin-top: var(--spacing-xs);
 }
 </style>

@@ -39,8 +39,8 @@
                 </select>
                 <span v-if="errors.status" class="error-message">{{ errors.status[0] }}</span>
             </div>
-           
-            <div v-for="(translation, index) in form.translations" :key="index" class="translation-group">                                
+
+            <div v-for="(translation, index) in form.translations" :key="index" class="translation-group">
                 <div class="form-group">
                     <label :for="`name-${index}`">Nombre de la Opción:</label>
                     <input type="text" :id="`name-${index}`" v-model="translation.name" required />
@@ -52,8 +52,8 @@
                     <textarea :id="`description-${index}`" v-model="translation.description"></textarea>
                     <span v-if="errors[`translations.${index}.description`]" class="error-message">{{
                         errors[`translations.${index}.description`][0] }}</span>
-                </div>                
-            </div>           
+                </div>
+            </div>
             <span v-if="errors.translations" class="error-message">{{ errors.translations[0] }}</span>
 
             <div class="form-actions">
@@ -149,7 +149,7 @@ export default {
             } finally {
                 loadingSubmit.value = false;
             }
-        };        
+        };
 
         const submitForm = async () => {
             loadingSubmit.value = true;
@@ -199,7 +199,7 @@ export default {
             optionGroupProducts,
             loadingProducts,
             errorProducts,
-            optionId: props.optionId,            
+            optionId: props.optionId,
             submitForm,
         };
     },
@@ -209,38 +209,38 @@ export default {
 <style scoped>
 .option-form-container {
     max-width: 600px;
-    margin: 1.25em auto;
-    padding: 1.75em;
-    background-color: #fff;
+    margin: var(--spacing-xl) auto;
+    padding: var(--spacing-xxl);
+    background-color: var(--color-background-light);
     border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--box-shadow-base);
 }
 
 h2 {
-    font-size: 1.5em;
-    color: #333;
-    margin-top: 1.75em;
-    margin-bottom: 0.75em;
-    border-bottom: 1px solid #eee;
-    padding-bottom: 0.25em;
+    font-size: var(--font-size-h2);
+    color: var(--color-text-dark);
+    margin-top: var(--spacing-xxl);
+    margin-bottom: var(--spacing-md);
+    border-bottom: 1px solid var(--color-border-medium);
+    padding-bottom: var(--spacing-xs);
 }
 
 h3 {
-    font-size: 1.2em;
-    color: #555;
-    margin-top: 1.25em;
-    margin-bottom: 0.625em;
+    font-size: var(--font-size-h3);
+    color: var(--color-text-medium);
+    margin-top: var(--spacing-xl);
+    margin-bottom: var(--spacing-sm);
 }
 
 .option-form .form-group {
-    margin-bottom: 1.25em;
+    margin-bottom: var(--spacing-xl);
 }
 
 .option-form label {
     display: block;
-    margin-bottom: 0.5em;
+    margin-bottom: var(--spacing-sm);
     font-weight: bold;
-    color: #555;
+    color: var(--color-text-medium);
 }
 
 .option-form input[type="text"],
@@ -248,10 +248,10 @@ h3 {
 .option-form textarea,
 .option-form select {
     width: 100%;
-    padding: 0.5em;
-    border: 1px solid #ddd;
+    padding: var(--spacing-sm);
+    border: 1px solid var(--color-border-light);
     border-radius: 5px;
-    font-size: 1em;
+    font-size: var(--font-size-base);
     box-sizing: border-box;
 }
 
@@ -261,7 +261,7 @@ h3 {
 .option-form select:disabled {
     background-color: #e9ecef;
     cursor: not-allowed;
-    color: #6c757d;
+    color: var(--color-secondary);
 }
 
 .option-form textarea {
@@ -271,50 +271,50 @@ h3 {
 
 .translation-group {
     border: 1px solid #e0e0e0;
-    padding: 1.25em;
-    margin-bottom: 1.25em;
-    border-radius: 0.5em;
+    padding: var(--spacing-xl);
+    margin-bottom: var(--spacing-xl);
+    border-radius: var(--spacing-sm);
     background-color: #fcfcfc;
 }
 
 .add-translation-button,
 .remove-translation-button {
-    background-color: #007bff;
+    background-color: var(--color-primary);
     color: white;
-    padding: 0.5em 1em;
+    padding: var(--spacing-sm) var(--spacing-lg);
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 0.9em;
-    margin-top: 0.5em;
+    font-size: var(--font-size-md);
+    margin-top: var(--spacing-sm);
     transition: background-color 0.3s ease;
 }
 
 .add-translation-button:hover {
-    background-color: #0056b3;
+    background-color: var(--color-primary-hover);
 }
 
 .remove-translation-button {
-    background-color: #dc3545;
-    margin-left: 0.5em;
+    background-color: var(--color-danger);
+    margin-left: var(--spacing-xs);
 }
 
 .remove-translation-button:hover {
-    background-color: #c82333;
+    background-color: var(--color-danger-hover);
 }
 
 .form-actions {
     display: flex;
     justify-content: flex-end;
-    gap: 0.75em;
-    margin-top: 1.75em;
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-xs);
 }
 
 .form-actions button,
 .form-actions .cancel-button {
-    padding: 0.75em 1.5em;
-    border-radius: 5px;
-    font-size: 1em;
+    padding: var(--spacing-md);
+    border-radius: 8px;
+    font-size: var(--font-size-base);
     cursor: pointer;
     transition: background-color 0.3s ease, color 0.3s ease;
     text-decoration: none;
@@ -322,7 +322,7 @@ h3 {
 }
 
 .form-actions button {
-    background-color: #28a745;
+    background-color: var(--color-success);
     color: white;
     border: none;
 }
@@ -337,7 +337,7 @@ h3 {
 }
 
 .form-actions .cancel-button {
-    background-color: #6c757d;
+    background-color: var(--color-secondary);
     color: white;
     border: none;
 }
@@ -347,41 +347,41 @@ h3 {
 }
 
 .error-message {
-    color: #dc3545;
-    font-size: 0.8em;
-    margin-top: 0.25em;
+    color: var(--color-danger);
+    font-size: var(--font-size-sm);
+    margin-top: var(--spacing-xs);
 }
 
 .general-error {
     text-align: center;
-    margin-top: 1.25em;
-    padding: 0.5em;
-    background-color: #f8d7da;
-    border: 1px solid #f5c6cb;
+    margin-top: var(--spacing-xl);
+    padding: var(--spacing-sm);
+    background-color: var(--color-background-error);
+    border: 1px solid var(--color-border-error);
     border-radius: 5px;
 }
 
 .loading-products-message,
 .error-products-message {
     font-size: 0.9em;
-    margin-top: 0.25em;
-    padding: 0.25em;
+    margin-top: var(--spacing-xs);
+    padding: var(--spacing-xs);
     border-radius: 3px;
 }
 
 .loading-products-message {
     color: #00796b;
-    background-color: #e0f7fa;
+    background-color: var(--color-background-info);
 }
 
 .error-products-message {
     color: #721c24;
-    background-color: #f8d7da;
+    background-color: var(--color-background-error);
 }
 
 .info-text {
-    font-size: 0.85em;
-    color: #888;
-    margin-top: 0.25em;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-lighter);
+    margin-top: var(--spacing-xs);
 }
 </style>

@@ -108,18 +108,18 @@ export default {
 
 <style scoped>
 .option-list-container {
-    padding: 1.25em;
-    max-width: 960px;
+    padding: var(--spacing-xl);
+    max-width: var(--max-width-lg);
     margin: 0 auto;
 }
 
 .create-button {
     display: inline-block;
-    background-color: #28a745;
+    background-color: var(--color-success);
     color: white;
-    padding: 0.25em 1.25em;
-    margin-right: 0.5em;
-    margin-bottom: 1.25em;
+    padding: var(--spacing-xs) var(--spacing-xl);
+    margin-right: var(--spacing-sm);
+    margin-bottom: var(--spacing-xl);
     border-radius: 5px;
     text-decoration: none;
     transition: background-color 0.3s ease;
@@ -133,33 +133,33 @@ export default {
 .loading-message,
 .no-data-message {
     text-align: center;
-    padding: 1.25em;
-    font-size: 1.1em;
-    color: #666;
+    padding: var(--spacing-xl);
+    font-size: var(--font-size-lg);
+    color: var(--color-text-light);
 }
 
 .error-message.general-error {
     text-align: center;
-    margin-top: 1.25em;
-    padding: 0.5em;
-    background-color: #f8d7da;
-    border: 1px solid #f5c6cb;
+    margin-top: var(--spacing-xl);
+    padding: var(--spacing-sm);
+    background-color: var(--color-background-error);
+    border: 1px solid var(--color-border-error);
     border-radius: 5px;
-    color: #dc3545;
+    color: var(--color-danger);
 }
 
 /* --- ESTILOS PARA LAS TARJETAS (CARDS) --- */
 .option-cards-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(288px, 1fr));
-    gap: 1.25em;
-    margin-top: 1.25em;
+    gap: var(--spacing-xl);
+    margin-top: var(--spacing-xl);
 }
 
 .option-card {
     background-color: #fefefe;
-    border: 1px solid #eee;
-    border-radius: 0.5em;
+    border: 1px solid var(--color-border-medium);
+    border-radius: var(--spacing-sm);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
     overflow: hidden;
     display: flex;
@@ -195,21 +195,21 @@ export default {
 }
 
 .card-title {
-    font-size: 1.25em;
+    font-size: var(--font-size-h3);
     font-weight: bold;
     color: #333;
-    margin-bottom: 0.5em;
+    margin-bottom: var(--spacing-sm);
 }
 
 .card-description {
     font-size: 1em;
-    color: #666;
-    margin-bottom: 0.8em;
+    color: var(--color-text-light);
+    margin-bottom: var(--spacing-md);
     line-height: 1.4;
     height: 2.75em;
     overflow: hidden;
     text-overflow: ellipsis;
-    /* Añade puntos suspensivos si se corta */
+    /* Añade puntos suspensvar(--spacing-sm)si se corta */
     display: -webkit-box;
     -webkit-line-clamp: 2;
     /* Limita a 2 líneas */
@@ -217,19 +217,15 @@ export default {
 }
 
 .card-detail {
-    font-size: 0.9em;
+    font-size: var(--font-size-md);
     color: #444;
-    margin-bottom: 0.4em;
-}
-
-.card-detail strong {
-    color: #222;
+    margin-bottom: var(--spacing-sm);
 }
 
 .card-actions {
     display: flex;
     justify-content: space-around;
-    padding: 0.8em 1em 1em;
+    padding: var(--spacing-md) var(--spacing-lg) var(--spacing-lg);
     border-top: 1px solid #eee;
     background-color: #f7f7f7;
 }
@@ -237,32 +233,32 @@ export default {
 .edit-button,
 .delete-button {
     flex: 1;
-    padding: 0.5em 1em;
-    margin: 0 0.25em;
-    border: none;
+    padding: var(--spacing-sm) var(--spacing-lg);
+    margin: 0 var(--spacing-xs);
+    border:var(--spacing-sm);
     border-radius: 5px;
     cursor: pointer;
-    font-size: 0.9em;
+    font-size: var(--font-size-md);
     text-decoration: none;
     text-align: center;
     transition: background-color 0.3s ease;
 }
 
 .edit-button {
-    background-color: #007bff;
+    background-color: var(--color-primary);
     color: white;
 }
 
 .edit-button:hover {
-    background-color: #0056b3;
+    background-color: var(--color-primary-hover);
 }
 
 .delete-button {
-    background-color: #dc3545;
+    background-color: var(--color-danger);
     color: white;
 }
 
 .delete-button:hover {
-    background-color: #c82333;
+    background-color: var(--color-danger-hover);
 }
 </style>

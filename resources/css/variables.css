@@ -1,0 +1,54 @@
+:root {
+    /* --- Colores --- */
+    --color-primary: #007bff;         
+    --color-primary-hover:#0056b3;
+    --color-secondary: #6c757d;       
+    --color-success: #28a745;         
+    --color-warning: #ffc107;         
+    --color-danger: #dc3545;          
+    --color-danger-hover: #c82333;          
+    --color-text-dark: #333;          
+    --color-text-medium: #555;        
+    --color-text-light: #666;         
+    --color-text-lighter: #888;       
+    --color-background-light: #fff;   
+    --color-background-lighter: #f8f9fa; 
+    --color-background-gray: #f2f2f2; 
+    --color-background-alt-row: #f9f9f9; 
+    --color-border-light: #ddd;       
+    --color-border-medium: #eee;      
+    --color-border-error: #f5c6cb;    
+    --color-background-error: #f8d7da;
+    --color-background-info: #e0f7fa; 
+    --color-text-info: #00796b;       
+  
+    /* --- Espaciado (Padding & Margins) --- */
+    --spacing-xs: 0.25em;
+    --spacing-sm: 0.50em; 
+    --spacing-md: 0.75em;
+    --spacing-lg: 1em; 
+    --spacing-xl: 1.25em;
+    --spacing-xxl: 1.75em;
+  
+    /* --- Tamaños de Fuente --- */
+    --font-size-base: 1em;            
+    --font-size-sm: 0.8em;           
+    --font-size-md: 0.9em;            
+    --font-size-lg: 1.1em;            
+    --font-size-h1: 2em;              
+    --font-size-h2: 1.4em;            
+    --font-size-h3: 1.2em;            
+    --font-size-card-title: 1.25em;   
+  
+    /* --- Bordes y Sombras --- */    
+    --box-shadow-light: 0 2px 4px rgba(0, 0, 0, 0.2); 
+    --box-shadow-base: 0 4px 12px rgba(0, 0, 0, 0.1);  
+    --box-shadow-card: 0 2px 8px rgba(0, 0, 0, 0.08); 
+    --box-shadow-card-hover: 0 8px 20px rgba(0, 0, 0, 0.15); 
+    --border-radius-md: 8px;
+  
+    /* --- Anchos/Alturas --- */
+    --max-width-lg: 1000px; 
+    --max-width-md: 600px; 
+    --card-image-height: 160px; 
+  }

@@ -321,10 +321,10 @@ export default {
 <style scoped>
 .product-create-form {
 	max-width: 800px;
-	margin: 1.25em auto;
-	padding: 1.75empx;
-	background-color: #fff;
-	border-radius: 0.5em;
+	margin: var(--spacing-xl) auto;
+	padding: var(--spacing-xl);
+	background-color: var(--color-background-light);
+	border-radius: var(--spacing-sm);
 }
 
 .product-form {
@@ -336,75 +336,70 @@ export default {
 .form-section {
 	border: 1px solid #e0e0e0;
 	border-radius: 8px;
-	padding: 20px;
-	margin-bottom: 20px;
-	background-color: #f9f9f9;
+	padding: var(--spacing-xl);
+	margin-bottom: var(--spacing-xl);
+	background-color: var(--color-background-alt-row);
 }
 
 .form-section legend {
 	font-size: 1.3em;
 	font-weight: bold;
-	color: #555;
-	padding: 0 10px;
+	color: var(--color-text-medium);
+	padding: 0 var(--spacing-sm);
 	margin-left: -10px;
-	background-color: #f9f9f9;
+	background-color: var(--color-background-alt-row);
 	border-radius: 4px;
 }
 
 .form-group {
-	margin-bottom: 15px;
+	margin-bottom: var(--spacing-lg);
 }
 
 .form-group label {
 	display: block;
-	margin-bottom: 8px;
+	margin-bottom: var(--spacing-sm);
 	font-weight: bold;
 	color: #444;
 }
 
 .form-control {
-	width: calc(100% - 20px);
-	/* Ajuste para padding */
-	padding: 10px;
+	width: calc(100% - 20px);	
+	padding: var(--spacing-sm);
 	border: 1px solid #ccc;
 	border-radius: 5px;
-	font-size: 1em;
-	box-sizing: border-box;
-	/* Incluye padding y border en el ancho total */
+	font-size: var(--font-size-base);
+	box-sizing: border-box;	
 }
 
 textarea.form-control {
-	resize: vertical;
-	/* Permite redimensionar verticalmente */
+	resize: vertical;	
 	min-height: 80px;
 }
 
 .form-control:focus {
-	border-color: #007bff;
+	border-color: var(--color-primary);
 	box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 	outline: none;
 }
 
 .error-text {
-	color: #dc3545;
-	font-size: 0.85em;
-	margin-top: 5px;
+	color: var(--color-danger);
+	font-size: var(--font-size-sm);
+	margin-top: var(--spacing-xs);
 	display: block;
 }
 
 .submit-button {
-	background-color: #28a745;
+	background-color: var(--color-success);
 	color: white;
-	padding: 12px 25px;
+	padding: var(--spacing-sm) var(--spacing-xl);
 	border: none;
 	border-radius: 5px;
-	font-size: 1.1em;
+	font-size: var(--font-size-base);
 	cursor: pointer;
 	transition: background-color 0.3s ease, opacity 0.3s ease;
 	align-self: center;
-	/* Centra el botón */
 	width: auto;
-	/* Ancho automático */
 	min-width: 180px;
 }
 
@@ -422,55 +417,51 @@ textarea.form-control {
 	background-color: #d4edda;
 	color: #155724;
 	border: 1px solid #c3e6cb;
-	padding: 12px;
+	padding: var(--spacing-md);
 	border-radius: 5px;
-	margin-bottom: 20px;
+	margin-bottom: var(--spacing-xl);
 	text-align: center;
 }
 
 .error-message {
-	background-color: #f8d7da;
+	background-color: var(--color-background-error);
 	color: #721c24;
 	border: 1px solid #f5c6cb;
-	padding: 12px;
-	border-radius: 5px;
-	margin-bottom: 20px;
+	padding: var(--spacing-md);
+	border-radius: 4px;
+	margin-bottom: var(--spacing-xl);
 	text-align: center;
 }
 
 .pack-item-row {
 	display: flex;
 	align-items: flex-end;
-	/* Alinea los elementos en la parte inferior */
 	gap: 15px;
-	margin-bottom: 15px;
+	margin-bottom: var(--spacing-lg);
 	background-color: #f0f0f0;
-	padding: 10px;
+	padding: var(--spacing-sm);
 	border-radius: 5px;
 	border: 1px dashed #ccc;
 }
 
 .pack-item-row .form-group {
-	margin-bottom: 0;
-	/* Elimina el margen inferior del form-group dentro de la fila */
+	margin-bottom: 0;	
 }
 
 .flex-grow {
-	flex-grow: 1;
-	/* Permite que el select de producto crezca */
+	flex-grow: 1;	
 }
 
 .small-input {
-	width: 80px;
-	/* Ancho más pequeño para la cantidad */
+	width: 80px;	
 }
 
 .remove-item-button {
-	background-color: #dc3545;
+	background-color: var(--color-danger);
 	color: white;
 	border: none;
 	border-radius: 5px;
-	padding: 0.5em 0.75px;
+	padding: var(--spacing-sm) var(--spacing-md);
 	cursor: pointer;
 	font-weight: bold;
 	transition: background-color 0.2s ease;
@@ -481,19 +472,18 @@ textarea.form-control {
 }
 
 .remove-item-button:hover {
-	background-color: #c82333;
+	background-color: var(--color-danger-hover);
 }
 
 .add-item-button {
-	background-color: #17a2b8;
-	/* Un color diferente para añadir ítems */
+	background-color: #17a2b8;	
 	color: white;
 	border: none;
 	border-radius: 5px;
-	padding: 0.75em 1em;
+	padding: var(--spacing-sm) var(--spacing-md);
 	cursor: pointer;
 	transition: background-color 0.2s ease;
-	margin-top: 0.75em;
+	margin-top: var(--spacing-md);
 }
 
 .add-item-button:hover {

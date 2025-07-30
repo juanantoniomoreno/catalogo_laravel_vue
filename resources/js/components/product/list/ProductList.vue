@@ -1,6 +1,6 @@
 <template>
     <h1>Listado de {{ listTitle }}</h1>
-    <div class="product-list">        
+    <div class="product-list">
         <router-link v-if="filterType === 'simple'" to="/products/create" class="create-product-button">
             Crear Nuevo Producto
         </router-link>
@@ -127,124 +127,124 @@ export default {
 
 <style scoped>
 .product-list {
-    padding: 1.25em;
-    max-width: 960px;
+    padding: var(--spacing-xl);
+    max-width: var(--max-width-lg);
     margin: 0 auto;
 }
 
 .products-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 20px;
+    gap: 20px;    
 }
 
 .product-card {
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    background-color: var(--color-background-light);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--box-shadow-light);
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    padding-bottom: 15px;
+    padding-bottom: var(--spacing-lg);
 }
 
 .product-image {
     width: 100%;
-    height: 200px;
+    height: 200px;    
     object-fit: cover;
     object-position: center;
-    border-bottom: 1px solid #eee;
+    border-bottom: var(--border-width) solid var(--color-border-medium);
 }
 
 .product-details {
-    padding: 15px;
+    padding: var(--spacing-lg);
 }
 
 .product-details h2 {
-    font-size: 1.4em;
+    font-size: var(--font-size-h2);
     margin-top: 0;
-    margin-bottom: 10px;
-    color: #333;
+    margin-bottom: var(--spacing-sm);
+    color: var(--color-text-dark);
 }
 
 .product-description {
-    font-size: 0.9em;
-    color: #666;
-    margin-bottom: 10px;
+    font-size: var(--font-size-md);
+    color: var(--color-text-light);
+    margin-bottom: var(--spacing-sm);
 }
 
 .product-price {
-    font-size: 1.2em;
+    font-size: var(--font-size-h3);
     font-weight: bold;
-    color: #007bff;
-    margin-bottom: 5px;
+    color: var(--color-primary);
+    margin-bottom: var(--spacing-xs);
 }
 
 .product-status {
-    font-size: 0.8em;
-    color: #888;
+    font-size: var(--font-size-sm);    
+    color: var(--color-text-lighter);    
 }
 
 .error-message {
-    color: #dc3545;
-    background-color: #f8d7da;
-    border: 1px solid #f5c6cb;
-    padding: 10px;
-    border-radius: 5px;
-    margin-bottom: 15px;
+    color: var(--color-danger);    
+    background-color: var(--color-background-error);    
+    border: 1px solid var(--color-border-error);    
+    padding: var(--spacing-sm);    
+    border-radius: var(--border-radius-sm);    
+    margin-bottom: var(--spacing-lg);    
 }
 
 .product-actions {
     display: flex;
     justify-content: space-around;
-    padding: 0.8em 1em 1em;
-    border-top: 1px solid #eee;
-    background-color: #f7f7f7;
+    padding: var(--spacing-sm) var(--spacing-lg) var(--spacing-lg);    
+    border-top: 1px solid var(--color-border-medium);    
+    background-color: var(--color-background-gray);    
 }
 
 .edit-button,
 .delete-button {
     flex: 1;
-    padding: 0.5em 1em;
-    margin: 0 0.25em;
+    padding: var(--spacing-sm) var(--spacing-lg);
+    margin: 0 var(--spacing-xs);
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 0.9em;
+    font-size: var(--font-size-md);
     text-decoration: none;
     text-align: center;
     transition: background-color 0.3s ease;
 }
 
 .edit-button {
-    background-color: #007bff;
-    color: white;
+    background-color: var(--color-primary);
+    color: var(--color-background-light);
     border: none;
 }
 
 .edit-button:hover {
-    background-color: #0056b3;
+    background-color: var(--color-primary-hover);
 }
 
 .delete-button {
-    background-color: #dc3545;
-    color: white;
+    background-color: var(--color-danger);
+    color: var(--color-background-light);
     border: none;
 }
 
 .delete-button:hover {
-    background-color: #c82333;
+    background-color: var(--color-danger-hover);
 }
 
 .create-product-button {
     display: inline-block;
-    background-color: #28a745;
-    color: white;
-    padding: 0.25em 1.25em;
-    margin-right: 0.5em;
-    margin-bottom: 1.25em;
-    border-radius: 5px;    
+    background-color: var(--color-success);
+    color: var(--color-background-light);
+    padding: var(--spacing-xs) var(--spacing-xl);
+    margin-right: var(--spacing-sm);
+    margin-bottom: var(--spacing-xl);
+    border-radius: 5px;
     transition: background-color 0.3s ease;
     font-weight: bold;
 }
